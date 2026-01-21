@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Cadastrar Dono</title>
+    <style>
+        body {
+            background-color: #ffffff;
+            font-family: Arial, Helvetica, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .box {
+            background:#ffffff;
+            padding: 30px;
+            width: 400px;
+            border-radius: 8px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #0a0a0a;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+        }
+
+        button {
+            width: 100%;
+            margin-top: 15px;
+            padding: 10px;
+            background: #ee7171;
+            color: rgb(24, 20, 20);
+            border: none;
+            cursor: pointer;
+        }
+
+        a {
+            display: block;
+            text-align: center;
+            margin-top: 10px;
+            color: #ffffff;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="box">
+    <h2>Cadastrar Dono</h2>
+
+    <form method="POST"
+action="<%= dono ? '/donos/edit/' + dono.id_dono : '/donos/add' %>">
+
+<input type="text" name="nome" placeholder="Nome"
+value="<%= dono?.nome || '' %>" required>
+
+<input type="text" name="telefone" placeholder="Telefone"
+value="<%= dono?.telefone || '' %>" required>
+
+<button>Salvar</button>
+</form>
+
+    <a href="/donos">← Voltar para lista</a>
+</div>
+
+</body>
+</html>

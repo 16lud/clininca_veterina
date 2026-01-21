@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Donos</title>
+    <style>
+        body {
+            background-color: #ffffff;
+            font-family: Arial, Helvetica, sans-serif;
+            padding: 30px;
+        }
+
+        h1 {
+            text-align: center;
+            color: rgb(20, 20, 20);
+        }
+
+        .topo {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        a {
+            background: #504444;
+            color: white;
+            padding: 10px 15px;
+            text-decoration: none;
+            border-radius: 4px;
+        }
+
+        table {
+            width: 100%;
+            background: white;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #797070;
+            color: rgb(0, 0, 0);
+            padding: 10px;
+        }
+
+        td {
+            padding: 10px;
+            text-align: center;
+        }
+
+        tr:nth-child(even) {
+            background: #ffffff;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Donos Cadastrados</h1>
+
+<div class="topo">
+    <a href="/donos/add">+ Novo Dono</a>
+    <a href="/animais">Animais</a>
+</div>
+
+<table>
+  <tr>
+  <th>Nome</th>
+  <th>Telefone</th>
+  <th>Ações</th>
+  </tr>
+  
+  <% donos.forEach(d => { %>
+  <tr>
+  <td><%= d.nome %></td>
+  <td><%= d.telefone %></td>
+  <<td>
+    <a class="btn edit" href="/donos/edit/<%= d.id_dono %>">Editar</a>
+    <a class="btn delete"
+       href="/donos/delete/<%= d.id_dono %>"
+       onclick="return confirm('Deseja excluir este dono?')">
+       Excluir
+    </a>
+  </td>
+  
+  </tr>
+  <% }) %>
+  </table>
+  
+
+</body>
+</html>
+

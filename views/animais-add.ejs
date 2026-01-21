@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title><%= animal ? 'Editar Animal' : 'Cadastrar Animal' %></title>
+<style>
+body { background:white; font-family:Arial; padding:30px }
+form {
+    background:white;
+    max-width:500px;
+    margin:auto;
+    padding:20px;
+    border-radius:8px;
+}
+label { display:block; margin-top:10px }
+input, select {
+    width:100%;
+    padding:8px;
+    margin-top:5px;
+}
+button {
+    margin-top:15px;
+    padding:10px;
+    background:#3a9d9a;
+    color:white;
+    border:none;
+    width:100%;
+}
+a { display:block; margin-top:10px; text-align:center }
+</style>
+</head>
+<body>
+
+<h1 style="text-align:center;color:rgb(15, 15, 15)">
+<%= animal ? 'Editar Animal' : 'Cadastrar Animal' %>
+</h1>
+
+<form method="POST" action="<%= animal ? '/animais/edit/' + animal.id_animal : '/animais/add' %>">
+
+<label>Nome do Animal</label>
+<input type="text" name="nome" required value="<%= animal?.nome || '' %>">
+
+<label>Idade</label>
+<input type="number" name="idade" required value="<%= animal?.idade || '' %>">
+
+<label>Espécie</label>
+<input type="text" name="especie" required value="<%= animal?.especie || '' %>">
+
+<label>Raça</label>
+<input type="text" name="raca" required value="<%= animal?.raca || '' %>">
+
+<label>Dono</label>
+<select name="id_dono" required>
+    <option value="">Selecione</option>
+    <% donos.forEach(d => { %>
+        <option value="<%= d.id_dono %>"
+            <%= animal && animal.id_dono === d.id_dono ? 'selected' : '' %>>
+            <%= d.nome %>
+        </option>
+    <% }) %>
+</select>
+
+<button type="submit">Salvar</button>
+<a href="/animais">Voltar</a>
+
+</form>
+</body>
+</html>
+
+    
