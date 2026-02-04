@@ -55,45 +55,37 @@ router.post('/add', (req, res) => {
 // FORM EDITAR ANIMAL
 // =========================
 router.get('/edit/:id', (req, res) => {
-    const id = req.params.id;
+    const { id } = req.params;
 
-    const sqlAnimal = 'SELECT * FROM animais WHERE id_animal = ?';
-    const sqlDonos = 'SELECT * FROM donos ORDER BY nome';
+    const sql = `
+        SELECT * FROM animais WHERE id_animal = ?
+    `;
 
-    db.query(sqlAnimal, [id], (err, animalResult) => {
-        if (err || animalResult.length === 0)
-            return res.send('Animal não encontrado');
-
-        db.query(sqlDonos, (err, donos) => {
-            if (err) return res.send('Erro ao buscar donos');
-
-            res.render('animais-add', {
-                animal: animalResult[0],
-                donos
-            });
-        });
+    db.query(sql, [id], (err, result) => {
+        if (err) return res.send('Erro');
+        res.render('animais-add', { animal: result[0] });
     });
 });
+
 
 // =========================
 // ATUALIZAR ANIMAL
 // =========================
 router.post('/edit/:id', (req, res) => {
-    const id = req.params.id;
-    const { nome, idade, especie, raca, id_dono } = req.body;
+    const { id } = req.params;
+    const { nome, idade, especie, raca, id_dono, id_vet } = req.body;
 
     const sql = `
-        UPDATE animais
-        SET nome = ?, idade = ?, especie = ?, raca = ?, id_dono = ?
+        UPDATE animais SET
+        nome = ?, idade = ?, especie = ?, raca = ?, id_dono = ?, id_vet = ?
         WHERE id_animal = ?
     `;
 
-    db.query(sql, [nome, idade, especie, raca, id_dono, id], err => {
+    db.query(sql, [nome, idade, especie, raca, id_dono, id_vet, id], err => {
         if (err) {
             console.log(err);
-            return res.send('Erro ao atualizar animal');
+            return res.send('Erro ao editar');
         }
-
         res.redirect('/animais');
     });
 });
@@ -102,7 +94,7 @@ router.post('/edit/:id', (req, res) => {
 // EXCLUIR ANIMAL
 // =========================
 router.get('/delete/:id', (req, res) => {
-    const id = req.params.id;
+    const { id } = req.params;
 
     db.query(
         'DELETE FROM animais WHERE id_animal = ?',
@@ -112,7 +104,6 @@ router.get('/delete/:id', (req, res) => {
                 console.log(err);
                 return res.send('Erro ao excluir animal');
             }
-
             res.redirect('/animais');
         }
     );
