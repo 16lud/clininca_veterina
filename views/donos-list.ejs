@@ -61,30 +61,27 @@
 </div>
 
 <table>
-  <tr>
-  <th>Nome</th>
-  <th>Telefone</th>
-  <th>Ações</th>
-  </tr>
-  
-  <% donos.forEach(d => { %>
-  <tr>
-  <td><%= d.nome %></td>
-  <td><%= d.telefone %></td>
-  <<td>
-    <a class="btn edit" href="/donos/edit/<%= d.id_dono %>">Editar</a>
-    <a class="btn delete"
-       href="/donos/delete/<%= d.id_dono %>"
-       onclick="return confirm('Deseja excluir este dono?')">
-       Excluir
-    </a>
-  </td>
-  
-  </tr>
-  <% }) %>
-  </table>
-  
+    <tr>
+        <th>Nome</th>
+        <th>CPF</th>
+        <th>Ações</th>
+    </tr>
+
+    <% donos.forEach(d => { %>
+    <tr>
+        <td><%= d.nome %></td>
+        <td><%= d.cpf %></td>
+        <td>
+            <a href="/donos/edit/<%= d.id_dono %>">Editar</a>
+            <a 
+                href="/donos/delete/<%= d.id_dono %>"
+                onclick="return confirm('Deseja excluir este dono?')">
+                Excluir
+            </a>
+        </td>
+    </tr>
+    <% }) %>
+</table>
 
 </body>
 </html>
-

@@ -45,7 +45,7 @@
             display: block;
             text-align: center;
             margin-top: 10px;
-            color: #ffffff;
+            color: #000;
             text-decoration: none;
         }
     </style>
@@ -56,16 +56,26 @@
     <h2>Cadastrar Dono</h2>
 
     <form method="POST"
-action="<%= dono ? '/donos/edit/' + dono.id_dono : '/donos/add' %>">
+    action="<%= dono ? '/donos/edit/' + dono.id_dono : '/donos/add' %>">
 
-<input type="text" name="nome" placeholder="Nome"
-value="<%= dono?.nome || '' %>" required>
+        <input 
+            type="text" 
+            name="nome" 
+            placeholder="Nome do dono"
+            value="<%= dono?.nome || '' %>" 
+            required
+        >
 
-<input type="text" name="telefone" placeholder="Telefone"
-value="<%= dono?.telefone || '' %>" required>
+        <input 
+            type="text" 
+            name="cpf" 
+            placeholder="CPF (somente números)"
+            value="<%= dono?.cpf || '' %>" 
+            required
+        >
 
-<button>Salvar</button>
-</form>
+        <button>Salvar</button>
+    </form>
 
     <a href="/donos">← Voltar para lista</a>
 </div>

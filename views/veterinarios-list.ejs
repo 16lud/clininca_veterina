@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>Veterinários</title>
+<style>
+body { font-family: Arial; padding:30px; background:#f2f2f2 }
+h1 { text-align:center }
+a { padding:8px 12px; background:#555; color:white; text-decoration:none }
+table { width:100%; background:white; border-collapse:collapse; margin-top:20px }
+th, td { padding:10px; text-align:center }
+th { background:#777 }
+</style>
+</head>
+<body>
+
+<h1>Veterinários</h1>
+
+<a href="/veterinarios/add">+ Novo Veterinário</a>
+<a href="/animais">Animais</a>
+
+<table>
+<tr>
+<th>Nome</th>
+<th>CRMV</th>
+<th>Ações</th>
+</tr>
+
+<% veterinarios.forEach(v => { %>
+<tr>
+<td><%= v.nome %></td>
+<td><%= v.crmv %></td>
+<td>
+<a href="/veterinarios/edit/<%= v.id_veterinario %>">Editar</a>
+<a href="/veterinarios/delete/<%= v.id_veterinario %>"
+   onclick="return confirm('Excluir veterinário?')">
+Excluir
+</a>
+</td>
+</tr>
+<% }) %>
+
+</table>
+</body>
+</html>

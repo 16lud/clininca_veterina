@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>Veterinário</title>
+<style>
+body {
+    font-family: Arial;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+}
+.box {
+    width:350px;
+}
+input, button {
+    width:100%;
+    padding:10px;
+    margin-top:10px;
+}
+button {
+    background:#ee7171;
+    border:none;
+}
+</style>
+</head>
+<body>
+
+<div class="box">
+<h2><%= veterinario ? 'Editar' : 'Cadastrar' %> Veterinário</h2>
+
+<form method="POST"
+action="<%= veterinario ? '/veterinarios/edit/' + veterinario.id_veterinario : '/veterinarios/add' %>">
+
+<input type="text" name="nome" placeholder="Nome"
+value="<%= veterinario?.nome || '' %>" required>
+
+<input type="text" name="crmv" placeholder="CRMV"
+value="<%= veterinario?.crmv || '' %>" required>
+
+<button>Salvar</button>
+</form>
+
+<a href="/veterinarios">Voltar</a>
+</div>
+
+</body>
+</html>
