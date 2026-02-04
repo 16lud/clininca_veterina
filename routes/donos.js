@@ -6,7 +6,7 @@ const db = require('../db');
 // LISTAR DONOS
 // =====================
 router.get('/', (req, res) => {
-    const sql = 'SELECT id_dono AS id, nome, telefone FROM donos ORDER BY nome';
+    const sql = 'SELECT id_dono AS id, nome, cpf FROM donos ORDER BY nome';
 
     db.query(sql, (err, results) => {
         if (err) return res.send('Erro ao buscar donos');
