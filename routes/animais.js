@@ -7,63 +7,49 @@ const db = require('../db');
 // =========================
 router.get('/', (req, res) => {
     const sql = `
-    SELECT 
-    animais.id_animal AS id,
-    animais.nome AS nome,
-    animais.idade,
-    animais.especie,
-    animais.raca,
-    donos.nome AS dono_nome,
-    donos.telefone
-FROM animais
-LEFT JOIN donos ON animais.id_dono = donos.id_dono
-ORDER BY animais.nome
+        SELECT 
+            animais.id_animal,
+            animais.nome,
+            animais.idade,
+            animais.especie,
+            animais.raca,
+            donos.nome AS dono_nome,
+            donos.cpf
+        FROM animais
+        LEFT JOIN donos ON animais.cpf_dono = donos.cpf
+        ORDER BY animais.nome
     `;
 
     db.query(sql, (err, results) => {
         if (err) {
             console.log(err);
-            return res.send('Erro ao buscar animais');
+            return res.send('Erro ao listar animais');
         }
-
         res.render('animais-list', { animais: results });
     });
 });
 
-// =========================
-// FORM ADD ANIMAL
-// =========================
-router.get('/add', (req, res) => {
-    db.query('SELECT * FROM donos ORDER BY nome', (err, donos) => {
-        if (err) return res.send('Erro ao buscar donos');
-
-        res.render('animais-add', {
-            animal: null,
-            donos
-        });
-    });
-});
 
 // =========================
 // SALVAR ANIMAL
 // =========================
 router.post('/add', (req, res) => {
-    const { nome, idade, especie, raca, id_dono } = req.body;
+    const { nome, idade, especie, raca, cpf_dono } = req.body;
 
     const sql = `
-        INSERT INTO animais (nome, idade, especie, raca, id_dono)
+        INSERT INTO animais (nome, idade, especie, raca, cpf_dono)
         VALUES (?, ?, ?, ?, ?)
     `;
 
-    db.query(sql, [nome, idade, especie, raca, id_dono], err => {
+    db.query(sql, [nome, idade, especie, raca, cpf_dono], err => {
         if (err) {
             console.log(err);
             return res.send('Erro ao salvar animal');
         }
-
         res.redirect('/animais');
     });
 });
+
 
 // =========================
 // FORM EDITAR ANIMAL

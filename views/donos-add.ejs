@@ -58,21 +58,12 @@
     <form method="POST"
     action="<%= dono ? '/donos/edit/' + dono.id_dono : '/donos/add' %>">
 
-        <input 
-            type="text" 
-            name="nome" 
-            placeholder="Nome do dono"
-            value="<%= dono?.nome || '' %>" 
-            required
-        >
-
-        <input 
-            type="text" 
-            name="cpf" 
-            placeholder="CPF (somente números)"
-            value="<%= dono?.cpf || '' %>" 
-            required
-        >
+    <input type="text" name="cpf" placeholder="CPF" required
+    value="<%= dono?.cpf || '' %>">
+    
+    <input type="text" name="nome" placeholder="Nome" required
+    value="<%= dono?.nome || '' %>">
+    
 
         <button>Salvar</button>
     </form>
