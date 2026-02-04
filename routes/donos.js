@@ -25,11 +25,14 @@ router.get('/add', (req, res) => {
 // SALVAR DONO
 // =====================
 router.post('/add', (req, res) => {
-    const { cpf, nome } = req.body;
+    const { nome, cpf, email, endereco } = req.body;
 
-    const sql = 'INSERT INTO donos (cpf, nome) VALUES (?, ?)';
+    const sql = `
+      INSERT INTO donos (nome, cpf, email, endereco)
+      VALUES (?, ?, ?, ?)
+    `;
 
-    db.query(sql, [cpf, nome], err => {
+    db.query(sql, [nome, cpf, email, endereco], err => {
         if (err) {
             if (err.code === 'ER_DUP_ENTRY') {
                 return res.send('CPF já cadastrado');
@@ -40,6 +43,7 @@ router.post('/add', (req, res) => {
         res.redirect('/donos');
     });
 });
+
 
 
 // =====================
