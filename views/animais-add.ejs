@@ -50,15 +50,14 @@ a { display:block; margin-top:10px; text-align:center }
 <input type="text" name="raca" required value="<%= animal?.raca || '' %>">
 
 <label>Dono</label>
-<select name="cpf_dono" required>
-    <option value="">Selecione o dono</option>
-    <% donos.forEach(d => { %>
-        <option value="<%= d.cpf %>"
-            <%= animal && animal.cpf_dono === d.cpf ? 'selected' : '' %>>
-            <%= d.nome %> - <%= d.cpf %>
-        </option>
-    <% }) %>
+<select name="id_dono" class="form-control" required>
+  <% donos.forEach(d => { %>
+    <option value="<%= d.id_dono %>">
+      <%= d.nome %> - CPF: <%= d.cpf %>
+    </option>
+  <% }) %>
 </select>
+
 
 
 <button type="submit">Salvar</button>
