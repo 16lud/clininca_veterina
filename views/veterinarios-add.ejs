@@ -31,7 +31,7 @@ button {
 <h2><%= veterinario ? 'Editar' : 'Cadastrar' %> Veterinário</h2>
 
 <form method="POST"
-action="<%= veterinario ? '/veterinarios/edit/' + veterinario.id_veterinario : '/veterinarios/add' %>">
+action="<%= veterinario ? '/veterinarios/edit/' + veterinario.id_vet : '/veterinarios/add' %>">
 
 <input type="text" name="nome" placeholder="Nome"
 value="<%= veterinario?.nome || '' %>" required>

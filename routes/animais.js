@@ -10,10 +10,10 @@ router.get('/', (req, res) => {
                a.especie,
                a.raca,
                d.nome AS dono_nome,
-               v.nome AS veterinario_nome
+                   v.nome AS veterinario_nome
         FROM animais a
         LEFT JOIN donos d ON a.id_dono = d.id_dono
-        LEFT JOIN veterinarios v ON a.id_veterinario = v.id_veterinario
+            LEFT JOIN veterinarios v ON a.id_vet = v.id_vet
         ORDER BY a.nome
     `;
 
