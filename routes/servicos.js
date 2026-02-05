@@ -11,7 +11,7 @@ router.get('/', (req, res) => {
             return res.send('Erro ao carregar serviços');
         }
 
-        res.render('serviços-list.ejs', { servicos });
+        res.render('servicos-list.ejs', { servicos });
     });
 });
 
