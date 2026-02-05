@@ -41,4 +41,29 @@ router.get('/delete/:id', (req, res) => {
     );
 });
 
+// FORM EDITAR
+router.get('/edit/:id', (req, res) => {
+    db.query(
+        'SELECT * FROM veterinarios WHERE id_vet = ?',
+        [req.params.id],
+        (err, result) => {
+            if (err || result.length === 0) return res.send('Veterinário não encontrado');
+            res.render('veterinarios-add', { veterinario: result[0] });
+        }
+    );
+});
+
+// SALVAR EDIÇÃO
+router.post('/edit/:id', (req, res) => {
+    const { nome, especialidade, telefone, crmv } = req.body;
+    db.query(
+        'UPDATE veterinarios SET nome = ?, especialidade = ?, telefone = ?, crmv = ? WHERE id_vet = ?',
+        [nome, especialidade, telefone, crmv, req.params.id],
+        err => {
+            if (err) return res.send('Erro ao atualizar');
+            res.redirect('/veterinarios');
+        }
+    );
+});
+
 module.exports = router;

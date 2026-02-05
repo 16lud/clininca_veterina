@@ -23,6 +23,7 @@ th { background:#777 }
 <tr>
 <th>Nome</th>
 <th>CRMV</th>
+<th>Especialidade</th>
 <th>Ações</th>
 </tr>
 
@@ -30,6 +31,7 @@ th { background:#777 }
 <tr>
 <td><%= v.nome %></td>
 <td><%= v.crmv %></td>
+<td><%= v.especialidade || '—' %></td>
 <td>
 <a href="/veterinarios/edit/<%= v.id_vet %>">Editar</a>
 <a href="/veterinarios/delete/<%= v.id_vet %>"
