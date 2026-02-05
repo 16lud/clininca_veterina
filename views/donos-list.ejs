@@ -2,86 +2,141 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Donos</title>
+    <title>Donos - Clínica Veterinária</title>
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
     <style>
         body {
-            background-color: #ffffff;
-            font-family: Arial, Helvetica, sans-serif;
-            padding: 30px;
+            background-color: #f5f7fa;
         }
 
-        h1 {
-            text-align: center;
-            color: rgb(20, 20, 20);
+        .navbar {
+            background-color: #0b3c5d;
         }
 
-        .topo {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 20px;
+        .navbar-brand,
+        .nav-link {
+            color: #fff !important;
+            font-weight: 500;
         }
 
-        a {
-            background: #504444;
-            color: white;
-            padding: 10px 15px;
-            text-decoration: none;
-            border-radius: 4px;
+        .btn-add {
+            background-color: #ff2f92;
+            border-color: #ff2f92;
+            color: #fff;
+        }
+
+        .btn-add:hover {
+            background-color: #e02680;
+            border-color: #e02680;
         }
 
         table {
-            width: 100%;
-            background: white;
-            border-collapse: collapse;
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
 
-        th {
-            background: #797070;
-            color: rgb(0, 0, 0);
-            padding: 10px;
+        thead {
+            background-color: #0b3c5d;
+            color: white;
         }
 
-        td {
-            padding: 10px;
-            text-align: center;
+        tbody tr:hover {
+            background-color: #f0f0f0;
         }
 
-        tr:nth-child(even) {
-            background: #ffffff;
+        .btn-sm {
+            padding: 4px 8px;
+            font-size: 0.85rem;
         }
     </style>
 </head>
 <body>
 
-<h1>Donos Cadastrados</h1>
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg mb-4">
+    <div class="container">
+        <a class="navbar-brand" href="/">
+            🐾 Clínica Veterinária
+        </a>
 
-<div class="topo">
-    <a href="/donos/add">+ Novo Dono</a>
-    <a href="/animais">Animais</a>
+        <button class="navbar-toggler bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#menu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="menu">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="/donos">Donos</a></li>
+                <li class="nav-item"><a class="nav-link" href="/animais">Animais</a></li>
+                <li class="nav-item"><a class="nav-link" href="/veterinarios">Veterinários</a></li>
+                <li class="nav-item"><a class="nav-link" href="/servicos">Serviços</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- CONTEÚDO -->
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Donos Cadastrados</h2>
+        <a href="/donos/add" class="btn btn-add">
+            <i class="bi bi-plus-circle"></i> Novo Dono
+        </a>
+    </div>
+
+    <% if (donos.length === 0) { %>
+        <div class="alert alert-info text-center" role="alert">
+            Nenhum dono cadastrado. <a href="/donos/add">Cadastre um novo dono</a>
+        </div>
+    <% } else { %>
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th><i class="bi bi-person"></i> Nome</th>
+                        <th>CPF</th>
+                        <th>Telefone</th>
+                        <th>Email</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% donos.forEach(d => { %>
+                        <tr>
+                            <td><strong><%= d.nome %></strong></td>
+                            <td><%= d.cpf %></td>
+                            <td><%= d.telefone || '—' %></td>
+                            <td><%= d.email || '—' %></td>
+                            <td>
+                                <a href="/donos/edit/<%= d.id_dono %>" class="btn btn-sm btn-primary">
+                                    <i class="bi bi-pencil"></i> Editar
+                                </a>
+                                <a href="/donos/delete/<%= d.id_dono %>" 
+                                   onclick="return confirm('Deseja excluir este dono?')" 
+                                   class="btn btn-sm btn-danger">
+                                    <i class="bi bi-trash"></i> Excluir
+                                </a>
+                            </td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        </div>
+    <% } %>
 </div>
 
-<table>
-    <tr>
-        <th>Nome</th>
-        <th>CPF</th>
-        <th>Ações</th>
-    </tr>
+<!-- FOOTER -->
+<footer class="bg-dark text-light text-center p-3 mt-5">
+    <p class="mb-0">© 2026 - Clínica Veterinária</p>
+</footer>
 
-    <% donos.forEach(d => { %>
-    <tr>
-        <td><%= d.nome %></td>
-        <td><%= d.cpf %></td>
-        <td>
-            <a href="/donos/edit/<%= d.id_dono %>">Editar</a>
-            <a 
-                href="/donos/delete/<%= d.id_dono %>"
-                onclick="return confirm('Deseja excluir este dono?')">
-                Excluir
-            </a>
-        </td>
-    </tr>
-    <% }) %>
-</table>
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

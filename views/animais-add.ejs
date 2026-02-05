@@ -1,77 +1,139 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
 <head>
-<meta charset="UTF-8">
-<title><%= animal ? 'Editar Animal' : 'Cadastrar Animal' %></title>
-<style>
-body { background:white; font-family:Arial; padding:30px }
-form {
-    background:white;
-    max-width:500px;
-    margin:auto;
-    padding:20px;
-    border-radius:8px;
-}
-label { display:block; margin-top:10px }
-input, select {
-    width:100%;
-    padding:8px;
-    margin-top:5px;
-}
-button {
-    margin-top:15px;
-    padding:10px;
-    background:#3a9d9a;
-    color:white;
-    border:none;
-    width:100%;
-}
-a { display:block; margin-top:10px; text-align:center }
-</style>
+    <meta charset="UTF-8">
+    <title><%= animal ? 'Editar Animal' : 'Cadastrar Animal' %> - Clínica Veterinária</title>
+
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #f5f7fa;
+        }
+
+        .navbar {
+            background-color: #0b3c5d;
+        }
+
+        .navbar-brand,
+        .nav-link {
+            color: #fff !important;
+            font-weight: 500;
+        }
+
+        .form-container {
+            max-width: 600px;
+            margin: 50px auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .btn-save {
+            background-color: #ff2f92;
+            border-color: #ff2f92;
+            color: #fff;
+        }
+
+        .btn-save:hover {
+            background-color: #e02680;
+            border-color: #e02680;
+        }
+    </style>
 </head>
 <body>
 
-<h1 style="text-align:center;color:rgb(15, 15, 15)">
-<%= animal ? 'Editar Animal' : 'Cadastrar Animal' %>
-</h1>
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg mb-4">
+    <div class="container">
+        <a class="navbar-brand" href="/">
+            🐾 Clínica Veterinária
+        </a>
 
-<form method="POST" action="<%= animal ? '/animais/edit/' + animal.id_animal : '/animais/add' %>">
+        <button class="navbar-toggler bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#menu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-<label>Nome do Animal</label>
-<input type="text" name="nome" required value="<%= animal?.nome || '' %>">
+        <div class="collapse navbar-collapse" id="menu">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="/donos">Donos</a></li>
+                <li class="nav-item"><a class="nav-link" href="/animais">Animais</a></li>
+                <li class="nav-item"><a class="nav-link" href="/veterinarios">Veterinários</a></li>
+                <li class="nav-item"><a class="nav-link" href="/servicos">Serviços</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
 
-<label>Idade</label>
-<input type="number" name="idade" required value="<%= animal?.idade || '' %>">
+<!-- FORMULÁRIO -->
+<div class="form-container">
+    <h2 class="mb-4 text-center">
+        <%= animal ? 'Editar Animal' : 'Cadastrar Animal' %>
+    </h2>
 
-<label>Espécie</label>
-<input type="text" name="especie" required value="<%= animal?.especie || '' %>">
+    <form method="POST" action="<%= animal ? '/animais/edit/' + animal.id_animal : '/animais/add' %>">
+        <div class="mb-3">
+            <label for="nome" class="form-label">Nome do Animal</label>
+            <input type="text" class="form-control" id="nome" name="nome" required value="<%= animal?.nome || '' %>">
+        </div>
 
-<label>Raça</label>
-<input type="text" name="raca" required value="<%= animal?.raca || '' %>">
+        <div class="mb-3">
+            <label for="idade" class="form-label">Idade</label>
+            <input type="number" class="form-control" id="idade" name="idade" required value="<%= animal?.idade || '' %>">
+        </div>
 
-<label>Dono</label>
-<select name="id_dono" class="form-control" required>
-  <% donos.forEach(d => { %>
-    <option value="<%= d.id_dono %>">
-      <%= d.nome %> - CPF: <%= d.cpf %>
-    </option>
-  <% }) %>
-</select>
+        <div class="mb-3">
+            <label for="especie" class="form-label">Espécie</label>
+            <input type="text" class="form-control" id="especie" name="especie" required value="<%= animal?.especie || '' %>">
+        </div>
 
-<label>Veterinário</label>
-<select name="id_vet" class="form-control">
-  <option value="">-- Selecionar --</option>
-  <% (veterinarios || []).forEach(v => { %>
-    <option value="<%= v.id_vet %>"><%= v.nome %></option>
-  <% }) %>
-</select>
+        <div class="mb-3">
+            <label for="raca" class="form-label">Raça</label>
+            <input type="text" class="form-control" id="raca" name="raca" required value="<%= animal?.raca || '' %>">
+        </div>
 
+        <div class="mb-3">
+            <label for="id_dono" class="form-label">Dono</label>
+            <select class="form-select" id="id_dono" name="id_dono" required>
+                <option value="">-- Selecionar --</option>
+                <% donos.forEach(d => { %>
+                    <option value="<%= d.id_dono %>"><%= d.nome %> - CPF: <%= d.cpf %></option>
+                <% }) %>
+            </select>
+        </div>
 
+        <div class="mb-3">
+            <label for="id_vet" class="form-label">Veterinário</label>
+            <select class="form-select" id="id_vet" name="id_vet">
+                <option value="">-- Selecionar --</option>
+                <% (veterinarios || []).forEach(v => { %>
+                    <option value="<%= v.id_vet %>"><%= v.nome %> - <%= v.especialidade || 'Geral' %></option>
+                <% }) %>
+            </select>
+        </div>
 
-<button type="submit">Salvar</button>
-<a href="/animais">Voltar</a>
+        <div class="d-grid gap-2">
+            <button type="submit" class="btn btn-save">
+                <i class="bi bi-check-circle"></i> Salvar Animal
+            </button>
+            <a href="/animais" class="btn btn-outline-secondary">
+                <i class="bi bi-arrow-left"></i> Voltar
+            </a>
+        </div>
+    </form>
+</div>
 
-</form>
+<!-- FOOTER -->
+<footer class="bg-dark text-light text-center p-3 mt-5">
+    <p class="mb-0">© 2026 - Clínica Veterinária</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
 
