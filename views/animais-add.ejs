@@ -58,6 +58,14 @@ a { display:block; margin-top:10px; text-align:center }
   <% }) %>
 </select>
 
+<label>Veterinário</label>
+<select name="id_vet" class="form-control">
+  <option value="">-- Selecionar --</option>
+  <% (veterinarios || []).forEach(v => { %>
+    <option value="<%= v.id_vet %>"><%= v.nome %></option>
+  <% }) %>
+</select>
+
 
 
 <button type="submit">Salvar</button>
