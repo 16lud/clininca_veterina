@@ -3,28 +3,6 @@ const router = express.Router();
 const db = require('../db');
 const regexCRMV = /^CRMV-[A-Z]{2} [0-9]{5}$/;
 
-router.post('/add', (req, res) => {
-    const { nome, especialidade, celular, crmv } = req.body;
-
-    if (!regexCRMV.test(crmv)) {
-        return res.send('CRMV inválido. Use o formato: CRMV-SP 12345');
-    }
-
-    const sql = `
-        INSERT INTO veterinarios (nome, especialidade, celular, crmv)
-        VALUES (?, ?, ?, ?)
-    `;
-
-    db.query(sql, [nome, especialidade, celular, crmv], err => {
-        if (err) {
-            console.error(err);
-            return res.send('Erro ao salvar veterinário');
-        }
-
-        res.redirect('/veterinarios');
-    });
-});
-
 // LISTAR
 router.get('/', (req, res) => {
     db.query('SELECT * FROM veterinarios', (err, result) => {
@@ -41,6 +19,10 @@ router.get('/add', (req, res) => {
 // SALVAR
 router.post('/add', (req, res) => {
     const { nome, especialidade, telefone, crmv } = req.body;
+
+    if (!regexCRMV.test(crmv)) {
+        return res.send('CRMV inválido. Use o formato: CRMV-SP 12345');
+    }
 
     db.query(
         'INSERT INTO veterinarios (nome, especialidade, telefone, crmv) VALUES (?, ?, ?, ?)',

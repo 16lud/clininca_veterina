@@ -47,7 +47,16 @@
 
         <div class="mb-3">
             <label class="form-label">CRMV</label>
-            <input type="text" name="crmv" class="form-control" required value="<%= veterinario?.crmv || '' %>">
+            <input 
+                type="text"
+                name="crmv"
+                class="form-control"
+                placeholder="CRMV-SP 12345"
+                pattern="CRMV-[A-Z]{2} [0-9]{5}"
+                title="Formato obrigatório: CRMV-SP 12345"
+                required
+                value="<%= veterinario?.crmv || '' %>"
+            >
         </div>
 
         <div class="mb-3">
@@ -64,18 +73,6 @@
             <button class="btn btn-save" type="submit"><i class="bi bi-check-circle"></i> Salvar</button>
             <a href="/veterinarios" class="btn btn-outline-secondary">Voltar</a>
         </div>
-        <div class="mb-3">
-    <label class="form-label">CRMV</label>
-    <input 
-        type="text"
-        name="crmv"
-        class="form-control"
-        placeholder="CRMV-SP 12345"
-        pattern="CRMV-[A-Z]{2} [0-9]{5}"
-        title="Formato obrigatório: CRMV-SP 12345"
-        required
-    >
-</div>
     </form>
 </div>
 
