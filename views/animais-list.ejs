@@ -35,6 +35,7 @@ a.edit { background:#1e88e5 }
 <th>Raça</th>
 <th>Dono</th>
 <th>Veterinário</th>
+<th>Especialidade</th>
 <th>Ações</th>
 </tr>
 
@@ -46,6 +47,7 @@ a.edit { background:#1e88e5 }
 <td><%= a.raca %></td>
 <td><%= a.dono_nome || '—' %></td>
 <td><%= a.veterinario_nome || '—' %></td>
+<td><%= a.veterinario_especialidade || '—' %></td>
 <td>
      <a class="btn edit" href="/animais/edit/<%= a.id %>">Editar</a>
      <a class="btn delete"

@@ -17,7 +17,7 @@ app.use('/animais', animaisRoutes);
 app.use('/veterinarios', veterinariosRoutes);
 
 app.get('/', (req, res) => {
-    res.redirect('/animais');
+    res.render('index');
 });
 
 app.listen(3000, () => {
