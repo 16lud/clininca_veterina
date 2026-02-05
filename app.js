@@ -11,10 +11,12 @@ app.set('views', path.join(__dirname, 'views'));
 const donosRoutes = require('./routes/donos');
 const animaisRoutes = require('./routes/animais');
 const veterinariosRoutes = require('./routes/veterinarios');
+const servicosRoutes = require('./routes/serviços');
 
 app.use('/donos', donosRoutes);
 app.use('/animais', animaisRoutes);
 app.use('/veterinarios', veterinariosRoutes);
+app.use('/servicos', servicosRoutes);
 
 app.get('/', (req, res) => {
     res.redirect('/animais');
