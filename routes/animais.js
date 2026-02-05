@@ -5,7 +5,7 @@ const db = require('../db');
 router.get('/', (req, res) => {
     db.query('SELECT * FROM animais', (err, result) => {
         if (err) throw err;
-        res.render('animais', { animais: result });
+        res.render('animais-list', { animais: result });
     });
 });
 

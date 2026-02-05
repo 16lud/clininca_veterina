@@ -12,7 +12,7 @@ router.get('/', (req, res) => {
 
 // FORM
 router.get('/add', (req, res) => {
-    res.render('veterinarios-add', { vet: null });
+    res.render('veterinarios-add', { veterinario: null });
 });
 
 // SALVAR
