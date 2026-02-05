@@ -11,7 +11,7 @@ app.set('views', path.join(__dirname, 'views'));
 const donosRoutes = require('./routes/donos');
 const animaisRoutes = require('./routes/animais');
 const veterinariosRoutes = require('./routes/veterinarios');
-const servicosRoutes = require('./routes/serviços');
+const servicosRoutes = require('./routes/servicos');
 
 app.use('/donos', donosRoutes);
 app.use('/animais', animaisRoutes);
