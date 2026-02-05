@@ -34,7 +34,7 @@ a.edit { background:#1e88e5 }
 <th>Espécie</th>
 <th>Raça</th>
 <th>Dono</th>
-<th>veterinarios</th>
+<th>Veterinário</th>
 <th>Ações</th>
 </tr>
 
@@ -45,11 +45,11 @@ a.edit { background:#1e88e5 }
 <td><%= a.especie %></td>
 <td><%= a.raca %></td>
 <td><%= a.dono_nome || '—' %></td>
-<td><%= a.veterinarios|| '—' %></td>
+<td><%= a.veterinario_nome || '—' %></td>
 <td>
-    <a class="btn edit" href="/animais/edit/<%= a.id %>">Editar</a>
-    <a class="btn delete"
-       href="/animais/delete/<%= a.id %>"
+     <a class="btn edit" href="/animais/edit/<%= a.id %>">Editar</a>
+     <a class="btn delete"
+         href="/animais/delete/<%= a.id %>"
        onclick="return confirm('Deseja excluir este animal?')">
        Excluir
     </a>

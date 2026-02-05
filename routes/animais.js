@@ -3,7 +3,21 @@ const router = express.Router();
 const db = require('../db');
 
 router.get('/', (req, res) => {
-    db.query('SELECT * FROM animais', (err, result) => {
+    const sql = `
+        SELECT a.id_animal AS id,
+               a.nome,
+               a.idade,
+               a.especie,
+               a.raca,
+               d.nome AS dono_nome,
+               v.nome AS veterinario_nome
+        FROM animais a
+        LEFT JOIN donos d ON a.id_dono = d.id_dono
+        LEFT JOIN veterinarios v ON a.id_veterinario = v.id_veterinario
+        ORDER BY a.nome
+    `;
+
+    db.query(sql, (err, result) => {
         if (err) throw err;
         res.render('animais-list', { animais: result });
     });
