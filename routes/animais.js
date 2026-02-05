@@ -9,6 +9,24 @@ router.get('/', (req, res) => {
     });
 });
 
+// FORMULÁRIO DE CADASTRO
+router.get('/add', (req, res) => {
+    db.query('SELECT * FROM donos', (err, donos) => {
+        if (err) return res.send('Erro ao carregar donos');
+        res.render('animais-add', { donos: donos, animal: null });
+    });
+});
+
+// SALVAR ANIMAL
+router.post('/add', (req, res) => {
+    const { nome, idade, especie, raca, id_dono } = req.body;
+    const sql = 'INSERT INTO animais (nome, idade, especie, raca, id_dono) VALUES (?, ?, ?, ?, ?)';
+    db.query(sql, [nome, idade, especie, raca, id_dono], err => {
+        if (err) return res.send('Erro ao salvar animal');
+        res.redirect('/animais');
+    });
+});
+
 router.post('/excluir/:id', (req, res) => {
     const sql = 'DELETE FROM animais WHERE id_animal = ?';
 
