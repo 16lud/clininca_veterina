@@ -6,7 +6,7 @@ const db = require('../db');
 // LISTAR DONOS
 // =====================
 router.get('/', (req, res) => {
-    const sql = 'SELECT id_dono AS id, nome, cpf FROM donos ORDER BY nome';
+    const sql = 'SELECT id_dono, nome, cpf, telefone, email, endereco FROM donos ORDER BY nome';
 
     db.query(sql, (err, results) => {
         if (err) return res.send('Erro ao buscar donos');
@@ -66,12 +66,18 @@ router.get('/edit/:id', (req, res) => {
 // ATUALIZAR DONO
 // =====================
 router.post('/edit/:id', (req, res) => {
-    const { nome, telefone } = req.body;
+    const { nome, cpf, telefone, email, endereco } = req.body;
 
     db.query(
-        'UPDATE donos SET nome = ?, telefone = ? WHERE id_dono = ?',
-        [nome, telefone, req.params.id],
-        () => res.redirect('/donos')
+        'UPDATE donos SET nome = ?, cpf = ?, telefone = ?, email = ?, endereco = ? WHERE id_dono = ?',
+        [nome, cpf, telefone, email, endereco, req.params.id],
+        (err) => {
+            if (err) {
+                console.error(err);
+                return res.send('Erro ao atualizar dono');
+            }
+            res.redirect('/donos');
+        }
     );
 });
 
