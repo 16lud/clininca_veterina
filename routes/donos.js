@@ -49,6 +49,11 @@ router.post('/add', (req, res) => {
 // =====================
 // FORM EDITAR DONO
 // =====================
+// Caso alguém acesse /donos/edit/ sem fornecer id, redireciona para a lista
+router.get('/edit', (req, res) => {
+    return res.redirect('/donos');
+});
+
 router.get('/edit/:id', (req, res) => {
     db.query(
         'SELECT * FROM donos WHERE id_dono = ?',
