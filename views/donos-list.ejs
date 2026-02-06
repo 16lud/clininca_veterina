@@ -103,6 +103,7 @@
                         <th><i class="bi bi-person"></i> Nome</th>
                         <th>CPF</th>
                         <th>Telefone</th>
+                        <th>Endereço</th>
                         <th>Email</th>
                         <th>Ações</th>
                     </tr>
@@ -113,6 +114,7 @@
                             <td><strong><%= d.nome %></strong></td>
                             <td><%= d.cpf %></td>
                             <td><%= d.telefone || '—' %></td>
+                            <td><%= d.endereco || '—' %></td>
                             <td><%= d.email || '—' %></td>
                             <td>
                                 <a href="/donos/edit/<%= d.id_dono %>" class="btn btn-sm btn-primary">
