@@ -45,7 +45,7 @@ router.post('/finalizar', (req, res) => {
   const { forma_pagamento, valor } = req.body;
 
   const sqlAtendimento = `
-    INSERT INTO atendimento
+    INSERT INTO atendimentos
     (data_atendimento, horario, observacoes, id_animal, id_servico, id_vet)
     VALUES (?, ?, ?, ?, ?, ?)
   `;
@@ -82,7 +82,7 @@ router.post('/finalizar', (req, res) => {
 // lista de atendimentos
 router.get('/', (req, res) => {
 
-  const sql = `
+    const sql = `
     SELECT
       at.id_atendimento,
       an.nome AS animal,
@@ -92,7 +92,7 @@ router.get('/', (req, res) => {
       at.horario,
       pg.forma_pagamento,
       pg.valor
-    FROM atendimento at
+    FROM atendimentos at
     JOIN animais an ON at.id_animal = an.id
     JOIN servicos s ON at.id_servico = s.id
     JOIN veterinarios v ON at.id_vet = v.id
