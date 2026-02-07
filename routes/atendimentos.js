@@ -27,7 +27,7 @@ router.get('/agendar', (req, res) => {
 // recebe dados e vai para pagamento
 router.post('/pagamento', (req, res) => {
   req.session.atendimento = req.body;
-  res.render('pagamento', { atendimento: req.body });
+  res.render('pagamentos', { atendimento: req.body });
 });
 
 // finaliza pagamento e salva no banco
