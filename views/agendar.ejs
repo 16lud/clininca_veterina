@@ -347,7 +347,7 @@
         <select id="id_servico" name="id_servico" class="form-select" required>
           <option value="">-- Escolha uma especialidade --</option>
           <% servicos.forEach(servico => { %>
-            <option value="<%= servico.id_servico %>"><%= servico.nome_servico %> - R$ <%= (servico.preco_base || '0').toFixed(2) %></option>
+            <option value="<%= servico.id_servico %>"><%= servico.nome_servico %> - R$ <%= parseFloat(servico.preco_base || 0).toFixed(2) %></option>
           <% }) %>
         </select>
         <div class="error-message" id="error-id_servico">Por favor, selecione uma especialidade</div>
