@@ -737,6 +737,22 @@
 
     // Hora
     document.getElementById('summary-hora').textContent = document.getElementById('horario').value || '-';
+
+    // Valor
+    const servicoOption = servicoSelect.options[servicoSelect.selectedIndex];
+    if (servicoOption) {
+      // Extrair o valor do texto da opção (formato: "Nome - R$ 100.00")
+      const textoCompleto = servicoOption.text;
+      const partes = textoCompleto.split(' - ');
+      if (partes.length > 1) {
+        const valor = partes[1]; // Ex: "R$ 100.00"
+        document.getElementById('summary-valor').textContent = valor;
+      } else {
+        document.getElementById('summary-valor').textContent = '-';
+      }
+    } else {
+      document.getElementById('summary-valor').textContent = '-';
+    }
   }
 
   // Form submission
