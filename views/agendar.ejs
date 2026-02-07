@@ -267,6 +267,20 @@
       box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.15);
     }
 
+    /* Alert styles */
+    .alert {
+      padding: 12px 15px;
+      border-radius: 8px;
+      font-size: 14px;
+      margin-top: 10px;
+    }
+
+    .alert-warning {
+      background-color: #fff3cd;
+      border: 1px solid #ffecb5;
+      color: #856404;
+    }
+
     /* Responsive */
     @media (max-width: 768px) {
       .container-agendar {
@@ -450,50 +464,171 @@
     observacoes: ''
   };
 
-  // Initialize
-  document.addEventListener('DOMContentLoaded', function() {
-    updateStepIndicators();
-    setupInputListeners();
-    setMinDate();
-  });
+    // Dados recebidos do backend
+    const servicosData = <%- JSON.stringify(servicos) %>;
+    const veterinariosData = <%- JSON.stringify(veterinarios) %>;
 
-  function setupInputListeners() {
-    document.getElementById('id_animal').addEventListener('change', function() {
-      formData.id_animal = this.value;
-      updateSummary();
-    });
-    document.getElementById('id_servico').addEventListener('change', function() {
-      formData.id_servico = this.value;
-      updateSummary();
-    });
-    document.getElementById('id_vet').addEventListener('change', function() {
-      formData.id_vet = this.value;
-      updateSummary();
-    });
-    document.getElementById('data_atendimento').addEventListener('change', function() {
-      formData.data_atendimento = this.value;
-      updateSummary();
-    });
-    document.getElementById('horario').addEventListener('change', function() {
-      formData.horario = this.value;
-      updateSummary();
-    });
-    document.getElementById('observacoes').addEventListener('change', function() {
-      formData.observacoes = this.value;
-    });
-  }
+    // Mapeamento de serviço para especialidade (baseado no nome_servico e descricao)
+    // Você pode ajustar isso conforme necessário
+    const servicoEspecialidadeMap = {
+      1: 'Cardiologia', // Ajuste conforme necessário
+      2: 'Clínica Geral',
+      3: 'Diagnóstico'
+    };
 
-  function setMinDate() {
-    const today = new Date().toISOString().split('T')[0];
-    document.getElementById('data_atendimento').setAttribute('min', today);
-  }
+    // Initialize
+    document.addEventListener('DOMContentLoaded', function() {
+      updateStepIndicators();
+      setupInputListeners();
+      setMinDate();
+    });
 
-  function validateStep(step) {
-    let isValid = true;
+    function setupInputListeners() {
+      document.getElementById('id_animal').addEventListener('change', function() {
+        formData.id_animal = this.value;
+        updateSummary();
+      });
+      
+      // NOVO: Listener para filtrar veterinários quando serviço é selecionado
+      document.getElementById('id_servico').addEventListener('change', function() {
+        formData.id_servico = this.value;
+        updateVeterinariosByEspecialidade();
+        updateSummary();
+      });
+      
+      document.getElementById('id_vet').addEventListener('change', function() {
+        formData.id_vet = this.value;
+        updateSummary();
+      });
+      document.getElementById('data_atendimento').addEventListener('change', function() {
+        formData.data_atendimento = this.value;
+        updateSummary();
+      });
+      document.getElementById('horario').addEventListener('change', function() {
+        formData.horario = this.value;
+        updateSummary();
+      });
+      document.getElementById('observacoes').addEventListener('change', function() {
+        formData.observacoes = this.value;
+      });
+    }
 
-    // Remove previous error states
-    document.querySelectorAll('.form-control, .form-select').forEach(el => {
-      el.classList.remove('is-invalid');
+    // NOVO: Função para filtrar veterinários por especialidade
+    function updateVeterinariosByEspecialidade() {
+      const servicoId = document.getElementById('id_servico').value;
+      const vetSelect = document.getElementById('id_vet');
+      
+      if (!servicoId) {
+        // Se nenhum serviço foi selecionado, mostrar todos
+        populateVeterinarios(veterinariosData);
+        return;
+      }
+
+      // Encontrar o serviço selecionado
+      const servicoSelecionado = servicosData.find(s => s.id_servico == servicoId);
+      if (!servicoSelecionado) {
+        populateVeterinarios(veterinariosData);
+        return;
+      }
+
+      // Extrair especialidade do serviço
+      // Estratégia: buscar por palavras-chave na descrição ou nome
+      const nomeServico = servicoSelecionado.nome_servico.toLowerCase();
+      const descricaoServico = (servicoSelecionado.descricao || '').toLowerCase();
+
+      // Filtrar veterinários que têm especialidade compatível
+      const vetsFiltrados = veterinariosData.filter(vet => {
+        if (!vet.especialidade) return true; // Mostrar vets sem especialidade também
+        
+        const especialidadeVet = vet.especialidade.toLowerCase();
+        
+        // Buscar correspondência de palavras-chave
+        if (nomeServico.includes('cardiologia') || descricaoServico.includes('cardiologia')) {
+          return especialidadeVet.includes('cardio');
+        }
+        if (nomeServico.includes('dermatologia') || descricaoServico.includes('dermatologia')) {
+          return especialidadeVet.includes('dermat');
+        }
+        if (nomeServico.includes('ortopedia') || descricaoServico.includes('ortopedia')) {
+          return especialidadeVet.includes('ortop');
+        }
+        if (nomeServico.includes('oftalmologia') || descricaoServico.includes('oftalmologia')) {
+          return especialidadeVet.includes('oftalmolog') || especialidadeVet.includes('oftalmolog');
+        }
+        if (nomeServico.includes('endocrinologia') || descricaoServico.includes('endocrinologia')) {
+          return especialidadeVet.includes('endocrin');
+        }
+        if (nomeServico.includes('neurologia') || descricaoServico.includes('neurologia')) {
+          return especialidadeVet.includes('neurolog');
+        }
+        if (nomeServico.includes('clínica') || nomeServico.includes('clinica') || descricaoServico.includes('clínica') || descricaoServico.includes('clinica')) {
+          return especialidadeVet.includes('clínica') || especialidadeVet.includes('clinica') || especialidadeVet.includes('geral');
+        }
+        if (nomeServico.includes('exame') || nomeServico.includes('diagnóstico') || descricaoServico.includes('exame')) {
+          return especialidadeVet.includes('diagnóstico') || especialidadeVet.includes('diagnostico') || especialidadeVet.includes('radiolog') || especialidadeVet.includes('ultrassom');
+        }
+        
+        // Padrão genérico: se não encontrar correspondência específica, mostrar todos
+        return true;
+      });
+
+      if (vetsFiltrados.length === 0) {
+        // Nenhum veterinário disponível para esta especialidade
+        populateVeterinarios([]);
+        showVeterinarioNaoDisponivel();
+      } else {
+        populateVeterinarios(vetsFiltrados);
+        hideVeterinarioNaoDisponivel();
+      }
+
+      // Resetar seleção anterior de veterinário
+      formData.id_vet = '';
+    }
+
+    // NOVO: Preencher select de veterinários dinamicamente
+    function populateVeterinarios(vets) {
+      const vetSelect = document.getElementById('id_vet');
+      const currentValue = vetSelect.value;
+
+      // Limpar opções (mantém a primeira)
+      while (vetSelect.options.length > 1) {
+        vetSelect.remove(1);
+      }
+
+      // Adicionar veterinários filtrados
+      vets.forEach(vet => {
+        const option = document.createElement('option');
+        option.value = vet.id_vet;
+        option.text = `${vet.nome} (${vet.especialidade}) - CRMV: ${vet.crmv}`;
+        vetSelect.appendChild(option);
+      });
+
+      // Tentar manter valor anterior se ainda existe
+      if (currentValue && Array.from(vetSelect.options).some(opt => opt.value === currentValue)) {
+        vetSelect.value = currentValue;
+      }
+    }
+
+    // NOVO: Mostrar mensagem de nenhum veterinário disponível
+    function showVeterinarioNaoDisponivel() {
+      let messageEl = document.getElementById('no-vet-message');
+      if (!messageEl) {
+        messageEl = document.createElement('div');
+        messageEl.id = 'no-vet-message';
+        messageEl.className = 'alert alert-warning mt-2';
+        messageEl.style.display = 'block';
+        messageEl.innerHTML = '⚠️ Nenhum veterinário disponível para esta especialidade. Por favor, escolha outro serviço.';
+        document.getElementById('id_vet').parentElement.appendChild(messageEl);
+      } else {
+        messageEl.style.display = 'block';
+      }
+    }
+
+    function hideVeterinarioNaoDisponivel() {
+      const messageEl = document.getElementById('no-vet-message');
+      if (messageEl) {
+        messageEl.style.display = 'none';
+      }
     });
     document.querySelectorAll('.error-message').forEach(el => {
       el.style.display = 'none';
