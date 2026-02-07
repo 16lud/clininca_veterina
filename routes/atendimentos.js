@@ -86,16 +86,16 @@ router.get('/', (req, res) => {
     SELECT
       at.id_atendimento,
       an.nome AS animal,
-      s.nome AS servico,
+      s.nome_servico AS servico,
       v.nome AS veterinario,
       at.data_atendimento,
       at.horario,
       pg.forma_pagamento,
       pg.valor
     FROM atendimentos at
-    JOIN animais an ON at.id_animal = an.id
-    JOIN servicos s ON at.id_servico = s.id
-    JOIN veterinarios v ON at.id_vet = v.id
+    JOIN animais an ON at.id_animal = an.id_animal
+    JOIN servicos s ON at.id_servico = s.id_servico
+    JOIN veterinarios v ON at.id_vet = v.id_vet
     LEFT JOIN pagamentos pg ON pg.id_atendimento = at.id_atendimento
     ORDER BY at.data_atendimento, at.horario
   `;
