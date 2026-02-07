@@ -594,47 +594,60 @@
       if (messageEl) {
         messageEl.style.display = 'none';
       }
-    });
-    document.querySelectorAll('.error-message').forEach(el => {
-      el.style.display = 'none';
-    });
-
-    switch(step) {
-      case 1:
-        if (!document.getElementById('id_animal').value) {
-          showError('id_animal', 'Por favor, selecione um animal');
-          isValid = false;
-        }
-        break;
-      case 2:
-        if (!document.getElementById('id_servico').value) {
-          showError('id_servico', 'Por favor, selecione uma especialidade');
-          isValid = false;
-        }
-        break;
-      case 3:
-        if (!document.getElementById('id_vet').value) {
-          showError('id_vet', 'Por favor, selecione um veterinário');
-          isValid = false;
-        }
-        break;
-      case 4:
-        if (!document.getElementById('data_atendimento').value) {
-          showError('data_atendimento', 'Por favor, selecione uma data');
-          isValid = false;
-        }
-        if (!document.getElementById('horario').value) {
-          showError('horario', 'Por favor, selecione um horário');
-          isValid = false;
-        }
-        break;
-      case 5:
-        isValid = true;
-        break;
     }
 
-    return isValid;
-  }
+    function setMinDate() {
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('data_atendimento').setAttribute('min', today);
+    }
+
+    function validateStep(step) {
+      let isValid = true;
+
+      // Remove previous error states
+      document.querySelectorAll('.form-control, .form-select').forEach(el => {
+        el.classList.remove('is-invalid');
+      });
+      document.querySelectorAll('.error-message').forEach(el => {
+        el.style.display = 'none';
+      });
+
+      switch(step) {
+        case 1:
+          if (!document.getElementById('id_animal').value) {
+            showError('id_animal', 'Por favor, selecione um animal');
+            isValid = false;
+          }
+          break;
+        case 2:
+          if (!document.getElementById('id_servico').value) {
+            showError('id_servico', 'Por favor, selecione uma especialidade');
+            isValid = false;
+          }
+          break;
+        case 3:
+          if (!document.getElementById('id_vet').value) {
+            showError('id_vet', 'Por favor, selecione um veterinário');
+            isValid = false;
+          }
+          break;
+        case 4:
+          if (!document.getElementById('data_atendimento').value) {
+            showError('data_atendimento', 'Por favor, selecione uma data');
+            isValid = false;
+          }
+          if (!document.getElementById('horario').value) {
+            showError('horario', 'Por favor, selecione um horário');
+            isValid = false;
+          }
+          break;
+        case 5:
+          isValid = true;
+          break;
+      }
+
+      return isValid;
+    }
 
   function showError(fieldId, message) {
     const field = document.getElementById(fieldId);
