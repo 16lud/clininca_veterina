@@ -239,23 +239,27 @@
     <h5 style="margin-bottom: 15px; color: #333;">📋 Resumo do Agendamento</h5>
     <div class="resumo-item">
       <span class="resumo-label">🐾 Animal:</span>
-      <span class="resumo-valor" id="resumo-animal">-</span>
+      <span class="resumo-valor"><%= atendimento.nome_animal %></span>
+    </div>
+    <div class="resumo-item">
+      <span class="resumo-label">👤 Dono:</span>
+      <span class="resumo-valor"><%= atendimento.nome_dono %></span>
     </div>
     <div class="resumo-item">
       <span class="resumo-label">🏥 Serviço:</span>
-      <span class="resumo-valor" id="resumo-servico">-</span>
+      <span class="resumo-valor"><%= atendimento.nome_servico %></span>
     </div>
     <div class="resumo-item">
       <span class="resumo-label">👨‍⚕️ Veterinário:</span>
-      <span class="resumo-valor" id="resumo-vet">-</span>
+      <span class="resumo-valor"><%= atendimento.nome_vet %></span>
     </div>
     <div class="resumo-item">
       <span class="resumo-label">📅 Data:</span>
-      <span class="resumo-valor" id="resumo-data">-</span>
+      <span class="resumo-valor"><%= atendimento.data_atendimento %></span>
     </div>
     <div class="resumo-item">
       <span class="resumo-label">⏰ Horário:</span>
-      <span class="resumo-valor" id="resumo-hora">-</span>
+      <span class="resumo-valor"><%= atendimento.horario %></span>
     </div>
   </div>
 
@@ -272,8 +276,14 @@
 
   <!-- Formulário de Pagamento -->
   <form action="/atendimentos/finalizar" method="POST">
-    <!-- Hidden field com o valor -->
-    <input type="hidden" name="valor" value="<%= valor || 0 %>">
+    <!-- Hidden fields com os IDs para salvar no banco -->
+    <input type="hidden" name="id_animal" value="<%= atendimento.id_animal %>">
+    <input type="hidden" name="id_servico" value="<%= atendimento.id_servico %>">
+    <input type="hidden" name="id_vet" value="<%= atendimento.id_vet %>">
+    <input type="hidden" name="data_atendimento" value="<%= atendimento.data_atendimento %>">
+    <input type="hidden" name="horario" value="<%= atendimento.horario %>">
+    <input type="hidden" name="observacoes" value="<%= atendimento.observacoes || '' %>">
+    <input type="hidden" name="valor" value="<%= valor || 0 %>">>
 
     <div class="form-group-custom">
       <label for="forma_pagamento">Forma de Pagamento</label>
@@ -297,27 +307,7 @@
   </form>
 </div>
 
-<script>
-  // Preencher resumo do atendimento baseado nos dados da sessão
-  document.addEventListener('DOMContentLoaded', function() {
-    const atendimento = <%- JSON.stringify(atendimento) %>;
 
-    // Função para extrair o texto do select
-    function getSelectLabel(selectId, value) {
-      // Isso será preenchido no servidor se necessário
-      return value;
-    }
-
-    // Atualizar resumo (se necessário, pode ser melhorado com dados do servidor)
-    if (atendimento) {
-      document.getElementById('resumo-animal').textContent = atendimento.id_animal || '-';
-      document.getElementById('resumo-servico').textContent = atendimento.id_servico || '-';
-      document.getElementById('resumo-vet').textContent = atendimento.id_vet || '-';
-      document.getElementById('resumo-data').textContent = atendimento.data_atendimento || '-';
-      document.getElementById('resumo-hora').textContent = atendimento.horario || '-';
-    }
-  });
-</script>
 
 </body>
 </html> 

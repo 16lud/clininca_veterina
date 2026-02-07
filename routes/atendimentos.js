@@ -99,20 +99,58 @@ router.get('/api/veterinarios-por-especialidade/:servico_id', (req, res) => {
 router.post('/pagamento', (req, res) => {
   req.session.atendimento = req.body;
   
-  // Buscar o valor do serviço selecionado
-  const { id_servico } = req.body;
+  const { id_animal, id_servico, id_vet } = req.body;
   
-  db.query('SELECT preco_base FROM servicos WHERE id_servico = ?', [id_servico], (err, servicos) => {
+  // Query para buscar dados legíveis (nome do animal, dono, serviço, vet, valor)
+  const query = `
+    SELECT 
+      a.nome_animal,
+      a.id_dono,
+      d.nome_dono,
+      s.nome_servico,
+      s.preco_base,
+      v.nome AS nome_vet
+    FROM animais a
+    LEFT JOIN donos d ON a.id_dono = d.id_dono
+    LEFT JOIN servicos s ON s.id_servico = ?
+    LEFT JOIN veterinarios v ON v.id_vet = ?
+    WHERE a.id_animal = ?
+  `;
+  
+  db.query(query, [id_servico, id_vet, id_animal], (err, results) => {
     if (err) {
       console.error(err);
-      return res.status(500).send('Erro ao buscar valor do serviço');
+      return res.status(500).send('Erro ao buscar dados do atendimento');
     }
     
-    const valor = servicos && servicos.length > 0 ? servicos[0].preco_base : 0;
+    if (!results || results.length === 0) {
+      return res.status(404).send('Dados do atendimento não encontrados');
+    }
+    
+    const dados = results[0];
+    
+    // Criar objeto com dados legíveis para exibição
+    const atendimentoLegivel = {
+      // IDs para envio ao servidor (hidden fields)
+      id_animal,
+      id_servico,
+      id_vet,
+      data_atendimento: req.body.data_atendimento,
+      horario: req.body.horario,
+      observacoes: req.body.observacoes,
+      
+      // Dados legíveis para exibição
+      nome_animal: dados.nome_animal || '-',
+      nome_dono: dados.nome_dono || '-',
+      nome_servico: dados.nome_servico || '-',
+      nome_vet: dados.nome_vet || '-'
+    };
+    
+    const valor = dados.preco_base ? parseFloat(dados.preco_base) : 0;
     
     res.render('pagamentos', { 
-      atendimento: req.body,
-      valor: parseFloat(valor)
+      atendimento: atendimentoLegivel,
+      valor
     });
   });
 });
