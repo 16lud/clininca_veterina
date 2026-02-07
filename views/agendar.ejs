@@ -2,60 +2,636 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
-  <title>Agendar Atendimento</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agendar Atendimento - Clínica Veterinária</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    :root {
+      --primary-color: #0d6efd;
+      --success-color: #198754;
+      --danger-color: #dc3545;
+    }
+
+    body {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .container-agendar {
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+      padding: 40px;
+      max-width: 600px;
+      width: 100%;
+    }
+
+    .header-agendar {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .header-agendar h1 {
+      color: #333;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .header-agendar p {
+      color: #666;
+      font-size: 16px;
+    }
+
+    /* Progressbar customizada */
+    .steps-indicator {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 30px;
+      position: relative;
+    }
+
+    .steps-indicator::before {
+      content: '';
+      position: absolute;
+      top: 20px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: #e0e0e0;
+      z-index: 0;
+    }
+
+    .step {
+      flex: 1;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .step-number {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #e0e0e0;
+      color: #666;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 8px;
+      font-weight: 700;
+      font-size: 18px;
+      transition: all 0.3s ease;
+    }
+
+    .step.active .step-number {
+      background: var(--primary-color);
+      color: white;
+      box-shadow: 0 0 0 8px rgba(13, 110, 253, 0.1);
+    }
+
+    .step.completed .step-number {
+      background: var(--success-color);
+      color: white;
+    }
+
+    .step-label {
+      font-size: 12px;
+      color: #666;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .step.active .step-label {
+      color: var(--primary-color);
+    }
+
+    .step.completed .step-label {
+      color: var(--success-color);
+    }
+
+    /* Form steps */
+    .form-step {
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .form-step.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .form-group-custom {
+      margin-bottom: 25px;
+    }
+
+    .form-group-custom label {
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 10px;
+      display: block;
+    }
+
+    .form-control, .form-select {
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 12px 15px;
+      font-size: 15px;
+      transition: all 0.3s ease;
+    }
+
+    .form-control:focus, .form-select:focus {
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.15);
+    }
+
+    .form-select {
+      cursor: pointer;
+      background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      background-size: 18px;
+      padding-right: 38px;
+      appearance: none;
+    }
+
+    .textarea-description {
+      font-size: 13px;
+      color: #999;
+      margin-top: 5px;
+    }
+
+    /* Buttons */
+    .buttons-container {
+      display: flex;
+      gap: 12px;
+      margin-top: 30px;
+      justify-content: space-between;
+    }
+
+    .btn-custom {
+      padding: 12px 30px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 16px;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      flex: 1;
+    }
+
+    .btn-primary-custom {
+      background: var(--primary-color);
+      color: white;
+    }
+
+    .btn-primary-custom:hover {
+      background: #0b5ed7;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(13, 110, 253, 0.3);
+    }
+
+    .btn-secondary-custom {
+      background: #e0e0e0;
+      color: #333;
+    }
+
+    .btn-secondary-custom:hover {
+      background: #d0d0d0;
+    }
+
+    .btn-secondary-custom:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Summary */
+    .summary-card {
+      background: #f8f9fa;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .summary-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .summary-item:last-child {
+      margin-bottom: 0;
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .summary-label {
+      color: #666;
+      font-weight: 600;
+    }
+
+    .summary-value {
+      color: #333;
+      font-weight: 700;
+    }
+
+    /* Error message */
+    .error-message {
+      color: var(--danger-color);
+      font-size: 14px;
+      margin-top: 5px;
+      display: none;
+    }
+
+    .form-control.is-invalid, .form-select.is-invalid {
+      border-color: var(--danger-color);
+    }
+
+    .form-control.is-invalid:focus, .form-select.is-invalid:focus {
+      box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.15);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .container-agendar {
+        padding: 25px;
+      }
+
+      .header-agendar {
+        margin-bottom: 30px;
+      }
+
+      .header-agendar h1 {
+        font-size: 24px;
+      }
+
+      .steps-indicator {
+        margin-bottom: 25px;
+      }
+
+      .step-label {
+        font-size: 10px;
+      }
+    }
+  </style>
 </head>
-<body class="container mt-4">
+<body>
 
-  <h2>Agendar Atendimento</h2>
+<div class="container-agendar">
+  <div class="header-agendar">
+    <h1>🐾 Agendar Consulta</h1>
+    <p>Escolha o serviço, veterinário, data e horário em poucos passos</p>
+  </div>
 
-  <form action="/atendimentos/pagamento" method="POST">
+  <!-- Progress Bar -->
+  <div class="steps-indicator">
+    <div class="step active" data-step="1">
+      <div class="step-number">1</div>
+      <div class="step-label">Animal</div>
+    </div>
+    <div class="step" data-step="2">
+      <div class="step-number">2</div>
+      <div class="step-label">Serviço</div>
+    </div>
+    <div class="step" data-step="3">
+      <div class="step-number">3</div>
+      <div class="step-label">Veterinário</div>
+    </div>
+    <div class="step" data-step="4">
+      <div class="step-number">4</div>
+      <div class="step-label">Data e Hora</div>
+    </div>
+    <div class="step" data-step="5">
+      <div class="step-number">5</div>
+      <div class="step-label">Confirmação</div>
+    </div>
+  </div>
 
-    <div class="mb-3">
-      <label class="form-label">Animal</label>
-      <select name="id_animal" class="form-control" required>
-        <% animais.forEach(animal => { %>
-          <option value="<%= animal.id_animal %>"><%= animal.nome %></option>
-        <% }) %>
-      </select>
+  <!-- Form -->
+  <form id="agendamentoForm" action="/atendimentos/pagamento" method="POST">
+
+    <!-- Step 1: Animal -->
+    <div class="form-step active" id="step-1">
+      <div class="form-group-custom">
+        <label for="id_animal">Selecione seu Animal</label>
+        <select id="id_animal" name="id_animal" class="form-select" required>
+          <option value="">-- Escolha um animal --</option>
+          <% animais.forEach(animal => { %>
+            <option value="<%= animal.id_animal %>"><%= animal.nome %> (<%= animal.especie %>)</option>
+          <% }) %>
+        </select>
+        <div class="error-message" id="error-id_animal">Por favor, selecione um animal</div>
+      </div>
     </div>
 
-    <div class="mb-3">
-      <label class="form-label">Serviço</label>
-      <select name="id_servico" class="form-control" required>
-        <% servicos.forEach(servico => { %>
-          <option value="<%= servico.id_servico %>"><%= servico.nome_servico %></option>
-        <% }) %>
-      </select>
+    <!-- Step 2: Serviço -->
+    <div class="form-step" id="step-2">
+      <div class="form-group-custom">
+        <label for="id_servico">Especialidade / Serviço</label>
+        <select id="id_servico" name="id_servico" class="form-select" required>
+          <option value="">-- Escolha uma especialidade --</option>
+          <% servicos.forEach(servico => { %>
+            <option value="<%= servico.id_servico %>"><%= servico.nome_servico %> - R$ <%= (servico.preco_base || '0').toFixed(2) %></option>
+          <% }) %>
+        </select>
+        <div class="error-message" id="error-id_servico">Por favor, selecione uma especialidade</div>
+      </div>
     </div>
 
-    <div class="mb-3">
-      <label class="form-label">Veterinário</label>
-      <select name="id_vet" class="form-control" required>
-        <% veterinarios.forEach(vet => { %>
-          <option value="<%= vet.id_vet %>"><%= vet.nome %> (<%= vet.especialidade %>)</option>
-        <% }) %>
-      </select>
+    <!-- Step 3: Veterinário -->
+    <div class="form-step" id="step-3">
+      <div class="form-group-custom">
+        <label for="id_vet">Escolha seu Veterinário</label>
+        <select id="id_vet" name="id_vet" class="form-select" required>
+          <option value="">-- Escolha um veterinário --</option>
+          <% veterinarios.forEach(vet => { %>
+            <option value="<%= vet.id_vet %>"><%= vet.nome %><br/><small><%= vet.especialidade %></small> - CRMV: <%= vet.crmv %></option>
+          <% }) %>
+        </select>
+        <div class="error-message" id="error-id_vet">Por favor, selecione um veterinário</div>
+      </div>
     </div>
 
-    <div class="mb-3">
-      <label class="form-label">Data</label>
-      <input type="date" name="data_atendimento" class="form-control" required>
+    <!-- Step 4: Data e Hora -->
+    <div class="form-step" id="step-4">
+      <div class="form-group-custom">
+        <label for="data_atendimento">Data da Consulta</label>
+        <input type="date" id="data_atendimento" name="data_atendimento" class="form-control" required>
+        <div class="error-message" id="error-data_atendimento">Por favor, selecione uma data futura</div>
+      </div>
+
+      <div class="form-group-custom">
+        <label for="horario">Horário Preferido</label>
+        <input type="time" id="horario" name="horario" class="form-control" required>
+        <div class="error-message" id="error-horario">Por favor, selecione um horário</div>
+      </div>
+
+      <div class="form-group-custom">
+        <label for="observacoes">Observações</label>
+        <textarea id="observacoes" name="observacoes" class="form-control" rows="4" placeholder="Descreva sintomas, alergias ou informações relevantes..."></textarea>
+        <div class="textarea-description">Informações adicionais ajudam o veterinário a preparar a melhor consulta</div>
+      </div>
     </div>
 
-    <div class="mb-3">
-      <label class="form-label">Horário</label>
-      <input type="time" name="horario" class="form-control" required>
+    <!-- Step 5: Confirmação -->
+    <div class="form-step" id="step-5">
+      <h5 style="margin-bottom: 20px; color: #333;">Resumo da Consulta</h5>
+      <div class="summary-card">
+        <div class="summary-item">
+          <span class="summary-label">🐾 Animal:</span>
+          <span class="summary-value" id="summary-animal">-</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">🏥 Serviço:</span>
+          <span class="summary-value" id="summary-servico">-</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">👨‍⚕️ Veterinário:</span>
+          <span class="summary-value" id="summary-vet">-</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">📅 Data:</span>
+          <span class="summary-value" id="summary-data">-</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">⏰ Horário:</span>
+          <span class="summary-value" id="summary-hora">-</span>
+        </div>
+        <% if (servicos && servicos[0]) { %>
+          <div class="summary-item">
+            <span class="summary-label">💰 Valor:</span>
+            <span class="summary-value" id="summary-valor">-</span>
+          </div>
+        <% } %>
+      </div>
     </div>
 
-    <div class="mb-3">
-      <label class="form-label">Observações</label>
-      <textarea name="observacoes" class="form-control"></textarea>
+    <!-- Navigation Buttons -->
+    <div class="buttons-container">
+      <button type="button" class="btn-custom btn-secondary-custom" id="btnVoltar" onclick="previousStep()" disabled>
+        ← Voltar
+      </button>
+      <button type="button" class="btn-custom btn-primary-custom" id="btnProximo" onclick="nextStep()">
+        Próximo →
+      </button>
+      <button type="submit" class="btn-custom btn-primary-custom" id="btnSubmit" style="display: none; background: var(--success-color);">
+        Confirmar Agendamento
+      </button>
     </div>
-
-    <button class="btn btn-primary">Ir para Pagamento</button>
-    <button class="btn btn-success" type="submit" formaction="/atendimentos/agendar">Agendar sem pagamento</button>
   </form>
+</div>
+
+<script>
+  let currentStep = 1;
+  const totalSteps = 5;
+
+  const formData = {
+    id_animal: '',
+    id_servico: '',
+    id_vet: '',
+    data_atendimento: '',
+    horario: '',
+    observacoes: ''
+  };
+
+  // Initialize
+  document.addEventListener('DOMContentLoaded', function() {
+    updateStepIndicators();
+    setupInputListeners();
+    setMinDate();
+  });
+
+  function setupInputListeners() {
+    document.getElementById('id_animal').addEventListener('change', function() {
+      formData.id_animal = this.value;
+      updateSummary();
+    });
+    document.getElementById('id_servico').addEventListener('change', function() {
+      formData.id_servico = this.value;
+      updateSummary();
+    });
+    document.getElementById('id_vet').addEventListener('change', function() {
+      formData.id_vet = this.value;
+      updateSummary();
+    });
+    document.getElementById('data_atendimento').addEventListener('change', function() {
+      formData.data_atendimento = this.value;
+      updateSummary();
+    });
+    document.getElementById('horario').addEventListener('change', function() {
+      formData.horario = this.value;
+      updateSummary();
+    });
+    document.getElementById('observacoes').addEventListener('change', function() {
+      formData.observacoes = this.value;
+    });
+  }
+
+  function setMinDate() {
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('data_atendimento').setAttribute('min', today);
+  }
+
+  function validateStep(step) {
+    let isValid = true;
+
+    // Remove previous error states
+    document.querySelectorAll('.form-control, .form-select').forEach(el => {
+      el.classList.remove('is-invalid');
+    });
+    document.querySelectorAll('.error-message').forEach(el => {
+      el.style.display = 'none';
+    });
+
+    switch(step) {
+      case 1:
+        if (!document.getElementById('id_animal').value) {
+          showError('id_animal', 'Por favor, selecione um animal');
+          isValid = false;
+        }
+        break;
+      case 2:
+        if (!document.getElementById('id_servico').value) {
+          showError('id_servico', 'Por favor, selecione uma especialidade');
+          isValid = false;
+        }
+        break;
+      case 3:
+        if (!document.getElementById('id_vet').value) {
+          showError('id_vet', 'Por favor, selecione um veterinário');
+          isValid = false;
+        }
+        break;
+      case 4:
+        if (!document.getElementById('data_atendimento').value) {
+          showError('data_atendimento', 'Por favor, selecione uma data');
+          isValid = false;
+        }
+        if (!document.getElementById('horario').value) {
+          showError('horario', 'Por favor, selecione um horário');
+          isValid = false;
+        }
+        break;
+      case 5:
+        isValid = true;
+        break;
+    }
+
+    return isValid;
+  }
+
+  function showError(fieldId, message) {
+    const field = document.getElementById(fieldId);
+    const errorEl = document.getElementById('error-' + fieldId);
+    if (field) {
+      field.classList.add('is-invalid');
+    }
+    if (errorEl) {
+      errorEl.textContent = message;
+      errorEl.style.display = 'block';
+    }
+  }
+
+  function nextStep() {
+    if (!validateStep(currentStep)) {
+      return;
+    }
+
+    if (currentStep < totalSteps) {
+      currentStep++;
+      showStep(currentStep);
+    }
+  }
+
+  function previousStep() {
+    if (currentStep > 1) {
+      currentStep--;
+      showStep(currentStep);
+    }
+  }
+
+  function showStep(step) {
+    // Hide all steps
+    document.querySelectorAll('.form-step').forEach(el => {
+      el.classList.remove('active');
+    });
+
+    // Show current step
+    document.getElementById('step-' + step).classList.add('active');
+
+    // Update buttons
+    document.getElementById('btnVoltar').disabled = (step === 1);
+    document.getElementById('btnProximo').style.display = (step === totalSteps) ? 'none' : 'block';
+    document.getElementById('btnSubmit').style.display = (step === totalSteps) ? 'block' : 'none';
+
+    // Update progress
+    updateStepIndicators();
+
+    // Scroll to top
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function updateStepIndicators() {
+    document.querySelectorAll('.step').forEach(step => {
+      const stepNum = parseInt(step.getAttribute('data-step'));
+      step.classList.remove('active', 'completed');
+
+      if (stepNum === currentStep) {
+        step.classList.add('active');
+      } else if (stepNum < currentStep) {
+        step.classList.add('completed');
+      }
+    });
+  }
+
+  function updateSummary() {
+    // Animal
+    const animalSelect = document.getElementById('id_animal');
+    const animalText = animalSelect.options[animalSelect.selectedIndex]?.text || '-';
+    document.getElementById('summary-animal').textContent = animalText;
+
+    // Serviço
+    const servicoSelect = document.getElementById('id_servico');
+    const servicoText = servicoSelect.options[servicoSelect.selectedIndex]?.text || '-';
+    document.getElementById('summary-servico').textContent = servicoText;
+
+    // Veterinário
+    const vetSelect = document.getElementById('id_vet');
+    const vetText = vetSelect.options[vetSelect.selectedIndex]?.text || '-';
+    document.getElementById('summary-vet').textContent = vetText;
+
+    // Data
+    const dataParts = document.getElementById('data_atendimento').value.split('-');
+    const dataFormatada = dataParts.length === 3 ? 
+      new Date(dataParts[0], dataParts[1] - 1, dataParts[2]).toLocaleDateString('pt-BR') : '-';
+    document.getElementById('summary-data').textContent = dataFormatada;
+
+    // Hora
+    document.getElementById('summary-hora').textContent = document.getElementById('horario').value || '-';
+  }
+
+  // Form submission
+  document.getElementById('agendamentoForm').addEventListener('submit', function(e) {
+    // Allow form to submit naturally to the server
+    // The form action is already set to /atendimentos/pagamento
+  });
+</script>
 
 </body>
 </html>
