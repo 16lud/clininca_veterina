@@ -15,7 +15,7 @@
       <label class="form-label">Animal</label>
       <select name="id_animal" class="form-control" required>
         <% animais.forEach(animal => { %>
-          <option value="<%= animal.id %>"><%= animal.nome %></option>
+          <option value="<%= animal.id_animal %>"><%= animal.nome %></option>
         <% }) %>
       </select>
     </div>
@@ -24,7 +24,7 @@
       <label class="form-label">Serviço</label>
       <select name="id_servico" class="form-control" required>
         <% servicos.forEach(servico => { %>
-          <option value="<%= servico.id %>"><%= servico.nome %></option>
+          <option value="<%= servico.id_servico %>"><%= servico.nome_servico %></option>
         <% }) %>
       </select>
     </div>
@@ -33,7 +33,7 @@
       <label class="form-label">Veterinário</label>
       <select name="id_vet" class="form-control" required>
         <% veterinarios.forEach(vet => { %>
-          <option value="<%= vet.id %>"><%= vet.nome %></option>
+          <option value="<%= vet.id_vet %>"><%= vet.nome %> (<%= vet.especialidade %>)</option>
         <% }) %>
       </select>
     </div>
@@ -54,6 +54,7 @@
     </div>
 
     <button class="btn btn-primary">Ir para Pagamento</button>
+    <button class="btn btn-success" type="submit" formaction="/atendimentos/agendar">Agendar sem pagamento</button>
   </form>
 
 </body>

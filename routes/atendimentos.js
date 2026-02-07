@@ -79,6 +79,36 @@ router.post('/finalizar', (req, res) => {
   });
 });
 
+// agendar sem pagamento — insere atendimento diretamente
+router.post('/agendar', (req, res) => {
+  const {
+    id_animal,
+    id_servico,
+    id_vet,
+    data_atendimento,
+    horario,
+    observacoes
+  } = req.body;
+
+  const sqlAtendimento = `
+    INSERT INTO atendimentos
+    (data_atendimento, horario, observacoes, id_animal, id_servico, id_vet)
+    VALUES (?, ?, ?, ?, ?, ?)
+  `;
+
+  db.query(sqlAtendimento, [
+    data_atendimento,
+    horario,
+    observacoes,
+    id_animal,
+    id_servico,
+    id_vet
+  ], (err, result) => {
+    if (err) throw err;
+    res.redirect('/atendimentos');
+  });
+});
+
 // lista de atendimentos
 router.get('/', (req, res) => {
 
@@ -86,14 +116,17 @@ router.get('/', (req, res) => {
     SELECT
       at.id_atendimento,
       an.nome AS animal,
+      d.nome AS dono,
       s.nome_servico AS servico,
       v.nome AS veterinario,
+      v.especialidade AS especialidade,
       at.data_atendimento,
       at.horario,
       pg.forma_pagamento,
       pg.valor
     FROM atendimentos at
     JOIN animais an ON at.id_animal = an.id_animal
+    JOIN donos d ON an.id_dono = d.id_dono
     JOIN servicos s ON at.id_servico = s.id_servico
     JOIN veterinarios v ON at.id_vet = v.id_vet
     LEFT JOIN pagamentos pg ON pg.id_atendimento = at.id_atendimento
