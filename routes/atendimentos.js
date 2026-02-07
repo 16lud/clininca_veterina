@@ -104,9 +104,8 @@ router.post('/pagamento', (req, res) => {
   // Query para buscar dados legíveis (nome do animal, dono, serviço, vet, valor)
   const query = `
     SELECT 
-      a.nome_animal,
-      a.id_dono,
-      d.nome_dono,
+      a.nome as nome_animal,
+      d.nome as nome_dono,
       s.nome_servico,
       s.preco_base,
       v.nome AS nome_vet
