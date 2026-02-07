@@ -24,6 +24,77 @@ router.get('/agendar', (req, res) => {
   });
 });
 
+// API: Retorna veterinários filtrados por especialidade (para AJAX no frontend)
+router.get('/api/veterinarios-por-especialidade/:servico_id', (req, res) => {
+  const servicoId = req.params.servico_id;
+
+  // Buscar serviço
+  db.query('SELECT * FROM servicos WHERE id_servico = ?', [servicoId], (err, servicos) => {
+    if (err) {
+      return res.status(500).json({ error: 'Erro ao buscar serviço' });
+    }
+    
+    if (!servicos || servicos.length === 0) {
+      return res.status(404).json({ error: 'Serviço não encontrado' });
+    }
+
+    const servico = servicos[0];
+    
+    // Buscar todos os veterinários
+    db.query('SELECT * FROM veterinarios ORDER BY nome', (err, veterinarios) => {
+      if (err) {
+        return res.status(500).json({ error: 'Erro ao buscar veterinários' });
+      }
+
+      // Filtrar veterinários por especialidade baseado no nome_servico e especialidade do vet
+      const nomeServico = (servico.nome_servico || '').toLowerCase();
+      const descricaoServico = (servico.descricao || '').toLowerCase();
+
+      const vetsFiltrados = veterinarios.filter(vet => {
+        if (!vet.especialidade) return true; // Mostrar vets sem especialidade
+
+        const especialidadeVet = vet.especialidade.toLowerCase();
+
+        // Buscar correspondência de palavras-chave
+        if (nomeServico.includes('cardiologia') || descricaoServico.includes('cardiologia')) {
+          return especialidadeVet.includes('cardio');
+        }
+        if (nomeServico.includes('dermatologia') || descricaoServico.includes('dermatologia')) {
+          return especialidadeVet.includes('dermat');
+        }
+        if (nomeServico.includes('ortopedia') || descricaoServico.includes('ortopedia')) {
+          return especialidadeVet.includes('ortop');
+        }
+        if (nomeServico.includes('oftalmologia') || descricaoServico.includes('oftalmologia')) {
+          return especialidadeVet.includes('oftalmolog');
+        }
+        if (nomeServico.includes('endocrinologia') || descricaoServico.includes('endocrinologia')) {
+          return especialidadeVet.includes('endocrin');
+        }
+        if (nomeServico.includes('neurologia') || descricaoServico.includes('neurologia')) {
+          return especialidadeVet.includes('neurolog');
+        }
+        if (nomeServico.includes('anestesiologia') || descricaoServico.includes('anestesiologia')) {
+          return especialidadeVet.includes('anestesio');
+        }
+        if (nomeServico.includes('cirurgia') || descricaoServico.includes('cirurgia')) {
+          return especialidadeVet.includes('cirurg');
+        }
+        if (nomeServico.includes('clínica') || nomeServico.includes('clinica') || descricaoServico.includes('clínica')) {
+          return especialidadeVet.includes('clínica') || especialidadeVet.includes('clinica') || especialidadeVet.includes('geral');
+        }
+        if (nomeServico.includes('exame') || nomeServico.includes('diagnóstico') || descricaoServico.includes('exame')) {
+          return especialidadeVet.includes('diagnóstico') || especialidadeVet.includes('diagnostico') || especialidadeVet.includes('radiolog') || especialidadeVet.includes('ultrassom');
+        }
+
+        return true;
+      });
+
+      res.json(vetsFiltrados);
+    });
+  });
+});
+
 // recebe dados e vai para pagamento
 router.post('/pagamento', (req, res) => {
   req.session.atendimento = req.body;
