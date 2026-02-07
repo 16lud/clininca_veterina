@@ -98,7 +98,23 @@ router.get('/api/veterinarios-por-especialidade/:servico_id', (req, res) => {
 // recebe dados e vai para pagamento
 router.post('/pagamento', (req, res) => {
   req.session.atendimento = req.body;
-  res.render('pagamentos', { atendimento: req.body });
+  
+  // Buscar o valor do serviço selecionado
+  const { id_servico } = req.body;
+  
+  db.query('SELECT preco_base FROM servicos WHERE id_servico = ?', [id_servico], (err, servicos) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).send('Erro ao buscar valor do serviço');
+    }
+    
+    const valor = servicos && servicos.length > 0 ? servicos[0].preco_base : 0;
+    
+    res.render('pagamentos', { 
+      atendimento: req.body,
+      valor: parseFloat(valor)
+    });
+  });
 });
 
 // finaliza pagamento e salva no banco
