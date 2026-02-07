@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Agendar Atendimento</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="container mt-4">
+
+  <h2>Agendar Atendimento</h2>
+
+  <form action="/atendimentos/pagamento" method="POST">
+
+    <div class="mb-3">
+      <label class="form-label">Animal</label>
+      <select name="id_animal" class="form-control" required>
+        <% animais.forEach(animal => { %>
+          <option value="<%= animal.id %>"><%= animal.nome %></option>
+        <% }) %>
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Serviço</label>
+      <select name="id_servico" class="form-control" required>
+        <% servicos.forEach(servico => { %>
+          <option value="<%= servico.id %>"><%= servico.nome %></option>
+        <% }) %>
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Veterinário</label>
+      <select name="id_vet" class="form-control" required>
+        <% veterinarios.forEach(vet => { %>
+          <option value="<%= vet.id %>"><%= vet.nome %></option>
+        <% }) %>
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Data</label>
+      <input type="date" name="data_atendimento" class="form-control" required>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Horário</label>
+      <input type="time" name="horario" class="form-control" required>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Observações</label>
+      <textarea name="observacoes" class="form-control"></textarea>
+    </div>
+
+    <button class="btn btn-primary">Ir para Pagamento</button>
+  </form>
+
+</body>
+</html>
