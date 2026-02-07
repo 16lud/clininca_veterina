@@ -111,8 +111,8 @@ router.post('/pagamento', (req, res) => {
       v.nome AS nome_vet
     FROM animais a
     LEFT JOIN donos d ON a.id_dono = d.id_dono
-    LEFT JOIN servicos s ON s.id_servico = ?
-    LEFT JOIN veterinarios v ON v.id_vet = ?
+    CROSS JOIN (SELECT nome_servico, preco_base FROM servicos WHERE id_servico = ?) s
+    CROSS JOIN (SELECT nome FROM veterinarios WHERE id_vet = ?) v
     WHERE a.id_animal = ?
   `;
   
