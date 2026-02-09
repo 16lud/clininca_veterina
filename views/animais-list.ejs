@@ -58,6 +58,7 @@
         }
     </style>
 </head>
+
 <body>
 
 <!-- NAVBAR -->
@@ -83,63 +84,66 @@
 </nav>
 
 <!-- CONTEÚDO -->
-<div class="container">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>Animais Cadastrados</h2>
-        <a href="/animais/add" class="btn btn-add">
-            <i class="bi bi-plus-circle"></i> Novo Animal
-        </a>
-    </div>
+<main class="content">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>Animais Cadastrados</h2>
+            <a href="/animais/add" class="btn btn-add">
+                <i class="bi bi-plus-circle"></i> Novo Animal
+            </a>
+        </div>
 
-    <% if (animais.length === 0) { %>
-        <div class="alert alert-info text-center" role="alert">
-            Nenhum animal cadastrado. <a href="/animais/add">Cadastre um novo animal</a>
-        </div>
-    <% } else { %>
-        <div class="table-responsive">
-            <table class="table table-hover mb-0">
-                <thead>
-                    <tr>
-                        <th><i class="bi bi-paw"></i> Animal</th>
-                        <th>Idade</th>
-                        <th>Espécie</th>
-                        <th>Raça</th>
-                        <th>Dono</th>
-                        <th>Veterinário</th>
-                        <th>Especialidade</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% animais.forEach(a => { %>
+        <% if (animais.length === 0) { %>
+            <div class="alert alert-info text-center" role="alert">
+                Nenhum animal cadastrado.
+                <a href="/animais/add">Cadastre um novo animal</a>
+            </div>
+        <% } else { %>
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead>
                         <tr>
-                            <td><strong><%= a.nome %></strong></td>
-                            <td><%= a.idade %> anos</td>
-                            <td><%= a.especie %></td>
-                            <td><%= a.raca %></td>
-                            <td><%= a.dono_nome || '—' %></td>
-                            <td><%= a.veterinario_nome || '—' %></td>
-                            <td><%= a.veterinario_especialidade || '—' %></td>
-                            <td>
-                                <a href="/animais/edit/<%= a.id %>" class="btn btn-sm btn-primary">
-                                    <i class="bi bi-pencil"></i> Editar
-                                </a>
-                                <a href="/animais/delete/<%= a.id %>" 
-                                   onclick="return confirm('Deseja excluir este animal?')" 
-                                   class="btn btn-sm btn-danger">
-                                    <i class="bi bi-trash"></i> Excluir
-                                </a>
-                            </td>
+                            <th><i class="bi bi-paw"></i> Animal</th>
+                            <th>Idade</th>
+                            <th>Espécie</th>
+                            <th>Raça</th>
+                            <th>Dono</th>
+                            <th>Veterinário</th>
+                            <th>Especialidade</th>
+                            <th>Ações</th>
                         </tr>
-                    <% }) %>
-                </tbody>
-            </table>
-        </div>
-    <% } %>
-</div>
+                    </thead>
+                    <tbody>
+                        <% animais.forEach(a => { %>
+                            <tr>
+                                <td><strong><%= a.nome %></strong></td>
+                                <td><%= a.idade %> anos</td>
+                                <td><%= a.especie %></td>
+                                <td><%= a.raca %></td>
+                                <td><%= a.dono_nome || '—' %></td>
+                                <td><%= a.veterinario_nome || '—' %></td>
+                                <td><%= a.veterinario_especialidade || '—' %></td>
+                                <td>
+                                    <a href="/animais/edit/<%= a.id %>" class="btn btn-sm btn-primary">
+                                        <i class="bi bi-pencil"></i> Editar
+                                    </a>
+                                    <a href="/animais/delete/<%= a.id %>"
+                                       onclick="return confirm('Deseja excluir este animal?')"
+                                       class="btn btn-sm btn-danger">
+                                        <i class="bi bi-trash"></i> Excluir
+                                    </a>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            </div>
+        <% } %>
+    </div>
+</main>
 
 <!-- FOOTER -->
 <%- include('partials/footer') %>
+
 </body>
 </html>
-
