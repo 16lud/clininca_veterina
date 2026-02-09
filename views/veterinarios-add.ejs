@@ -12,11 +12,19 @@
         body { background-color: #f5f7fa; }
         .navbar { background-color: #0b3c5d; }
         .navbar-brand, .nav-link { color: #fff !important; font-weight: 500; }
-        .form-container { max-width: 600px; margin: 50px auto; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .form-container {
+            max-width: 600px;
+            margin: 50px auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
         .btn-save { background-color: #ff2f92; border-color: #ff2f92; color: #fff; }
         .btn-save:hover { background-color: #e02680; }
     </style>
 </head>
+
 <body>
 
 <nav class="navbar navbar-expand-lg mb-4">
@@ -36,46 +44,56 @@
     </div>
 </nav>
 
-<div class="form-container">
-    <h2 class="mb-4 text-center"><%= veterinario ? 'Editar' : 'Cadastrar' %> Veterinário</h2>
+<!-- CONTEÚDO -->
+<main class="content">
+    <div class="form-container">
+        <h2 class="mb-4 text-center">
+            <%= veterinario ? 'Editar' : 'Cadastrar' %> Veterinário
+        </h2>
 
-    <form method="POST" action="<%= veterinario ? '/veterinarios/edit/' + veterinario.id_vet : '/veterinarios/add' %>">
-        <div class="mb-3">
-            <label class="form-label">Nome</label>
-            <input type="text" name="nome" class="form-control" required value="<%= veterinario?.nome || '' %>">
-        </div>
+        <form method="POST" action="<%= veterinario ? '/veterinarios/edit/' + veterinario.id_vet : '/veterinarios/add' %>">
+            <div class="mb-3">
+                <label class="form-label">Nome</label>
+                <input type="text" name="nome" class="form-control" required value="<%= veterinario?.nome || '' %>">
+            </div>
 
-        <div class="mb-3">
-            <label class="form-label">CRMV</label>
-            <input 
-                type="text"
-                name="crmv"
-                class="form-control"
-                placeholder="CRMV-SP 12345"
-                pattern="CRMV-[A-Z]{2} [0-9]{5}"
-                title="Formato obrigatório: CRMV-SP 12345"
-                required
-                value="<%= veterinario?.crmv || '' %>"
-            >
-        </div>
+            <div class="mb-3">
+                <label class="form-label">CRMV</label>
+                <input
+                    type="text"
+                    name="crmv"
+                    class="form-control"
+                    placeholder="CRMV-SP 12345"
+                    pattern="CRMV-[A-Z]{2} [0-9]{5}"
+                    title="Formato obrigatório: CRMV-SP 12345"
+                    required
+                    value="<%= veterinario?.crmv || '' %>"
+                >
+            </div>
 
-        <div class="mb-3">
-            <label class="form-label">Especialidade</label>
-            <input type="text" name="especialidade" class="form-control" required value="<%= veterinario?.especialidade || '' %>">
-        </div>
+            <div class="mb-3">
+                <label class="form-label">Especialidade</label>
+                <input type="text" name="especialidade" class="form-control" required value="<%= veterinario?.especialidade || '' %>">
+            </div>
 
-        <div class="mb-3">
-            <label class="form-label">Telefone</label>
-            <input type="text" name="telefone" class="form-control" value="<%= veterinario?.telefone || '' %>">
-        </div>
+            <div class="mb-3">
+                <label class="form-label">Telefone</label>
+                <input type="text" name="telefone" class="form-control" value="<%= veterinario?.telefone || '' %>">
+            </div>
 
-        <div class="d-grid gap-2">
-            <button class="btn btn-save" type="submit"><i class="bi bi-check-circle"></i> Salvar</button>
-            <a href="/veterinarios" class="btn btn-outline-secondary">Voltar</a>
-        </div>
-    </form>
-</div>
+            <div class="d-grid gap-2">
+                <button class="btn btn-save" type="submit">
+                    <i class="bi bi-check-circle"></i> Salvar
+                </button>
+                <a href="/veterinarios" class="btn btn-outline-secondary">
+                    Voltar
+                </a>
+            </div>
+        </form>
+    </div>
+</main>
 
+<!-- FOOTER -->
 <%- include('partials/footer') %>
 
 </body>
