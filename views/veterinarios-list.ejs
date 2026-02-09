@@ -58,6 +58,7 @@
         }
     </style>
 </head>
+
 <body>
 
 <!-- NAVBAR -->
@@ -83,54 +84,59 @@
 </nav>
 
 <!-- CONTEÚDO -->
-<div class="container">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>Veterinários Cadastrados</h2>
-        <a href="/veterinarios/add" class="btn btn-add">
-            <i class="bi bi-plus-circle"></i> Novo Veterinário
-        </a>
-    </div>
+<main class="content">
+    <div class="container">
 
-    <% if (veterinarios.length === 0) { %>
-        <div class="alert alert-info text-center" role="alert">
-            Nenhum veterinário cadastrado. <a href="/veterinarios/add">Cadastre um novo veterinário</a>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>Veterinários Cadastrados</h2>
+            <a href="/veterinarios/add" class="btn btn-add">
+                <i class="bi bi-plus-circle"></i> Novo Veterinário
+            </a>
         </div>
-    <% } else { %>
-        <div class="table-responsive">
-            <table class="table table-hover mb-0">
-                <thead>
-                    <tr>
-                        <th><i class="bi bi-person-hearts"></i> Nome</th>
-                        <th>CRMV</th>
-                        <th>Especialidade</th>
-                        <th>Telefone</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <% veterinarios.forEach(v => { %>
+
+        <% if (veterinarios.length === 0) { %>
+            <div class="alert alert-info text-center" role="alert">
+                Nenhum veterinário cadastrado.
+                <a href="/veterinarios/add">Cadastre um novo veterinário</a>
+            </div>
+        <% } else { %>
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead>
                         <tr>
-                            <td><strong><%= v.nome %></strong></td>
-                            <td><%= v.crmv %></td>
-                            <td><%= v.especialidade || '—' %></td>
-                            <td><%= v.telefone || '—' %></td>
-                            <td>
-                                <a href="/veterinarios/edit/<%= v.id_vet %>" class="btn btn-sm btn-primary">
-                                    <i class="bi bi-pencil"></i> Editar
-                                </a>
-                                <a href="/veterinarios/delete/<%= v.id_vet %>" 
-                                   onclick="return confirm('Deseja excluir este veterinário?')" 
-                                   class="btn btn-sm btn-danger">
-                                    <i class="bi bi-trash"></i> Excluir
-                                </a>
-                            </td>
+                            <th><i class="bi bi-person-hearts"></i> Nome</th>
+                            <th>CRMV</th>
+                            <th>Especialidade</th>
+                            <th>Telefone</th>
+                            <th>Ações</th>
                         </tr>
-                    <% }) %>
-                </tbody>
-            </table>
-        </div>
-    <% } %>
-</div>
+                    </thead>
+                    <tbody>
+                        <% veterinarios.forEach(v => { %>
+                            <tr>
+                                <td><strong><%= v.nome %></strong></td>
+                                <td><%= v.crmv %></td>
+                                <td><%= v.especialidade || '—' %></td>
+                                <td><%= v.telefone || '—' %></td>
+                                <td>
+                                    <a href="/veterinarios/edit/<%= v.id_vet %>" class="btn btn-sm btn-primary">
+                                        <i class="bi bi-pencil"></i> Editar
+                                    </a>
+                                    <a href="/veterinarios/delete/<%= v.id_vet %>"
+                                       onclick="return confirm('Deseja excluir este veterinário?')"
+                                       class="btn btn-sm btn-danger">
+                                        <i class="bi bi-trash"></i> Excluir
+                                    </a>
+                                </td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            </div>
+        <% } %>
+
+    </div>
+</main>
 
 <!-- FOOTER -->
 <%- include('partials/footer') %>
