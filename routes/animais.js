@@ -2,13 +2,13 @@ const express = require('express');
 const router = express.Router();
 const db = require('../db');
 
-/* =========================
-   LISTAR ANIMAIS
-========================= */
+// =====================
+// LISTAR ANIMAIS
+// =====================
 router.get('/', (req, res) => {
     const sql = `
         SELECT 
-            a.id_animal AS id,
+            a.id_animal,
             a.nome,
             a.idade,
             a.especie,
@@ -23,14 +23,14 @@ router.get('/', (req, res) => {
     `;
 
     db.query(sql, (err, result) => {
-        if (err) throw err;
+        if (err) return res.send('Erro ao buscar animais');
         res.render('animais-list', { animais: result });
     });
 });
 
-/* =========================
-   FORMULÁRIO DE CADASTRO
-========================= */
+// =====================
+// FORM ADD ANIMAL
+// =====================
 router.get('/add', (req, res) => {
     db.query('SELECT * FROM donos ORDER BY nome', (err, donos) => {
         if (err) return res.send('Erro ao carregar donos');
@@ -47,25 +47,38 @@ router.get('/add', (req, res) => {
     });
 });
 
-/* =========================
-   FORMULÁRIO DE EDIÇÃO
-========================= */
+// =====================
+// SALVAR ANIMAL
+// =====================
+router.post('/add', (req, res) => {
+    const { nome, idade, especie, raca, id_dono, id_vet } = req.body;
+
+    const sql = `
+        INSERT INTO animais (nome, idade, especie, raca, id_dono, id_vet)
+        VALUES (?, ?, ?, ?, ?, ?)
+    `;
+
+    db.query(
+        sql,
+        [nome, idade, especie, raca, id_dono || null, id_vet || null],
+        err => {
+            if (err) return res.send('Erro ao cadastrar animal');
+            res.redirect('/animais');
+        }
+    );
+});
+
+// =====================
+// FORM EDITAR ANIMAL
+// =====================
 router.get('/edit/:id', (req, res) => {
     const id = req.params.id;
 
-    const sqlAnimal = `
-        SELECT * FROM animais
-        WHERE id_animal = ?
-    `;
+    const sql = 'SELECT * FROM animais WHERE id_animal = ?';
 
-    db.query(sqlAnimal, [id], (err, resultAnimal) => {
-        if (err) return res.send('Erro ao carregar animal');
-
-        if (resultAnimal.length === 0) {
-            return res.redirect('/animais');
-        }
-
-        const animal = resultAnimal[0];
+    db.query(sql, [id], (err, result) => {
+        if (err || result.length === 0)
+            return res.send('Animal não encontrado');
 
         db.query('SELECT * FROM donos ORDER BY nome', (err2, donos) => {
             if (err2) return res.send('Erro ao carregar donos');
@@ -74,7 +87,7 @@ router.get('/edit/:id', (req, res) => {
                 if (err3) return res.send('Erro ao carregar veterinários');
 
                 res.render('animais-add', {
-                    animal,
+                    animal: result[0],
                     donos,
                     veterinarios: vets
                 });
@@ -83,31 +96,9 @@ router.get('/edit/:id', (req, res) => {
     });
 });
 
-/* =========================
-   SALVAR NOVO ANIMAL
-========================= */
-router.post('/add', (req, res) => {
-    const { nome, idade, especie, raca, id_dono, id_vet } = req.body;
-
-    const sql = `
-        INSERT INTO animais 
-        (nome, idade, especie, raca, id_dono, id_vet)
-        VALUES (?, ?, ?, ?, ?, ?)
-    `;
-
-    db.query(
-        sql,
-        [nome, idade, especie, raca, id_dono || null, id_vet || null],
-        err => {
-            if (err) throw err;
-            res.redirect('/animais');
-        }
-    );
-});
-
-/* =========================
-   ATUALIZAR ANIMAL
-========================= */
+// =====================
+// ATUALIZAR ANIMAL
+// =====================
 router.post('/edit/:id', (req, res) => {
     const { nome, idade, especie, raca, id_dono, id_vet } = req.body;
 
@@ -121,22 +112,24 @@ router.post('/edit/:id', (req, res) => {
         sql,
         [nome, idade, especie, raca, id_dono || null, id_vet || null, req.params.id],
         err => {
-            if (err) throw err;
+            if (err) return res.send('Erro ao atualizar animal');
             res.redirect('/animais');
         }
     );
 });
 
-/* =========================
-   EXCLUIR ANIMAL
-========================= */
+// =====================
+// EXCLUIR ANIMAL
+// =====================
 router.get('/delete/:id', (req, res) => {
-    const sql = 'DELETE FROM animais WHERE id_animal = ?';
-
-    db.query(sql, [req.params.id], err => {
-        if (err) throw err;
-        res.redirect('/animais');
-    });
+    db.query(
+        'DELETE FROM animais WHERE id_animal = ?',
+        [req.params.id],
+        err => {
+            if (err) return res.send('Erro ao excluir animal');
+            res.redirect('/animais');
+        }
+    );
 });
 
 module.exports = router;
