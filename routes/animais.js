@@ -8,7 +8,7 @@ const db = require('../db');
 router.get('/', (req, res) => {
     const sql = `
         SELECT 
-            a.id_animal,
+            a.id_animal AS id,
             a.nome,
             a.idade,
             a.especie,
@@ -74,11 +74,11 @@ router.post('/add', (req, res) => {
 router.get('/edit/:id', (req, res) => {
     const id = req.params.id;
 
-    const sql = 'SELECT * FROM animais WHERE id_animal = ?';
-
-    db.query(sql, [id], (err, result) => {
+    db.query('SELECT * FROM animais WHERE id_animal = ?', [id], (err, result) => {
         if (err || result.length === 0)
             return res.send('Animal não encontrado');
+
+        const animal = result[0];
 
         db.query('SELECT * FROM donos ORDER BY nome', (err2, donos) => {
             if (err2) return res.send('Erro ao carregar donos');
@@ -87,7 +87,7 @@ router.get('/edit/:id', (req, res) => {
                 if (err3) return res.send('Erro ao carregar veterinários');
 
                 res.render('animais-add', {
-                    animal: result[0],
+                    animal,
                     donos,
                     veterinarios: vets
                 });
@@ -119,7 +119,7 @@ router.post('/edit/:id', (req, res) => {
 });
 
 // =====================
-// EXCLUIR ANIMAL
+// EXCLUIR ANIMAL (IGUAL DONOS)
 // =====================
 router.get('/delete/:id', (req, res) => {
     db.query(
@@ -133,3 +133,4 @@ router.get('/delete/:id', (req, res) => {
 });
 
 module.exports = router;
+
