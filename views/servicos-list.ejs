@@ -43,6 +43,7 @@
         }
     </style>
 </head>
+
 <body>
 
 <!-- NAVBAR -->
@@ -54,64 +55,53 @@
 
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav ms-auto">
+                <li class="nav-item"><a class="nav-link" href="/donos">Donos</a></li>
+                <li class="nav-item"><a class="nav-link" href="/animais">Animais</a></li>
+                <li class="nav-item"><a class="nav-link" href="/veterinarios">Veterinários</a></li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/donos">Donos</a>
+                    <a class="nav-link" href="/atendimentos/agendar">Atendimentos</a>
                 </li>
-            
-                <li class="nav-item">
-                    <a class="nav-link" href="/animais">Animais</a>
-                </li>
-            
-                <li class="nav-item">
-                    <a class="nav-link" href="/veterinarios">Veterinários</a>
-                </li>
-            
-                <li class="nav-item">
-                    <a class="nav-link" href="/atendimentos/agendar">
-                        Atendimentos
-                    </a>
-                </li>
-            </ul>
-            
             </ul>
         </div>
     </div>
 </nav>
 
 <!-- CONTEÚDO -->
-<div class="container">
-    <h2 class="mb-4 text-center">Serviços Disponíveis</h2>
+<main class="content">
+    <div class="container">
+        <h2 class="mb-4 text-center">Serviços Disponíveis</h2>
 
-    <div class="row g-4">
-        <% if (servicos.length === 0) { %>
-            <div class="col-12 text-center">
-                <p class="text-muted">Nenhum serviço cadastrado.</p>
-            </div>
-        <% } %>
+        <div class="row g-4">
+            <% if (servicos.length === 0) { %>
+                <div class="col-12 text-center">
+                    <p class="text-muted">Nenhum serviço cadastrado.</p>
+                </div>
+            <% } %>
 
-        <% servicos.forEach(servico => { %>
-            <div class="col-md-4">
-                <div class="card card-servico">
-                    <div class="card-body text-center">
-                        <i class="bi bi-heart-pulse fs-1 text-primary"></i>
+            <% servicos.forEach(servico => { %>
+                <div class="col-md-4">
+                    <div class="card card-servico">
+                        <div class="card-body text-center">
+                            <i class="bi bi-heart-pulse fs-1 text-primary"></i>
 
-                        <h5 class="card-title mt-3">
-                            <%= servico.nome_servico %>
-                        </h5>
+                            <h5 class="card-title mt-3">
+                                <%= servico.nome_servico %>
+                            </h5>
 
-                        <p class="card-text">
-                            <%= servico.descricao %>
-                        </p>
+                            <p class="card-text">
+                                <%= servico.descricao %>
+                            </p>
 
-                        <p class="preco">
-                            R$ <%= servico.preco_base %>
-                        </p>
+                            <p class="preco">
+                                R$ <%= servico.preco_base %>
+                            </p>
+                        </div>
                     </div>
                 </div>
-            </div>
-        <% }) %>
+            <% }) %>
+        </div>
     </div>
-</div>
+</main>
 
 <!-- FOOTER -->
 <%- include('partials/footer') %>
