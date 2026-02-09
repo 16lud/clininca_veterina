@@ -130,7 +130,32 @@ router.get('/delete/:id', (req, res) => {
             res.redirect('/animais');
         }
     );
+});router.get('/delete/:id', (req, res) => {
+    const idAnimal = req.params.id;
+
+    // 1️⃣ Apaga os atendimentos do animal
+    const sqlAtendimentos = 'DELETE FROM atendimentos WHERE id_animal = ?';
+
+    db.query(sqlAtendimentos, [idAnimal], (err) => {
+        if (err) {
+            console.error(err);
+            return res.send('Erro ao excluir atendimentos do animal');
+        }
+
+        // 2️⃣ Agora apaga o animal
+        const sqlAnimal = 'DELETE FROM animais WHERE id_animal = ?';
+
+        db.query(sqlAnimal, [idAnimal], (err2) => {
+            if (err2) {
+                console.error(err2);
+                return res.send('Erro ao excluir animal');
+            }
+
+            res.redirect('/animais');
+        });
+    });
 });
+
 
 module.exports = router;
 
